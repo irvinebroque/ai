@@ -1,11 +1,11 @@
 import { Agent, type Schedule } from "agents-sdk";
-import { createWorkersAI } from "../../../packages/workers-ai-provider/src";
-import { extractActionType } from "./llm/extract-action-type.ts";
-import { extractAlarmMessage } from "./llm/extract-alarm-message.ts";
-import { extractAlarmType } from "./llm/extract-alarm-type.ts";
-import { extractScheduledDate } from "./llm/extract-scheduled-date.ts";
-import { extractScheduleId } from "./llm/extract-schedule-id.ts";
-import { extractCronSchedule } from "./llm/extract-cron-schedule.ts";
+import { createWorkersAI } from "workers-ai-provider";
+import { extractActionType } from "./llm/extract-action-type";
+import { extractAlarmMessage } from "./llm/extract-alarm-message";
+import { extractAlarmType } from "./llm/extract-alarm-type";
+import { extractScheduledDate } from "./llm/extract-scheduled-date";
+import { extractScheduleId } from "./llm/extract-schedule-id";
+import { extractCronSchedule } from "./llm/extract-cron-schedule";
 
 /**
  * Union type representing the different scheduling configurations.
@@ -74,19 +74,12 @@ export class SchedulerAgent extends Agent<{ AI: any }, SchedulerAgentState> {
 	async query(
 		query: string,
 	): Promise<
-		| { confirmation?: Confirmation; message?: string }
-		| Schedule[]
-		| string
-		| undefined
+		{ confirmation?: Confirmation; message?: string } | Schedule[] | string | undefined
 	> {
 		const workersai = createWorkersAI({ binding: this.env.AI });
 		const aiModel = workersai("@cf/meta/llama-3.3-70b-instruct-fp8-fast");
 
-		const { action, message } = await extractActionType(
-			aiModel,
-			query,
-			this.getSchedules(),
-		);
+		const { action, message } = await extractActionType(aiModel, query, this.getSchedules());
 
 		if (action === "list") {
 			return this.getSchedules();
@@ -149,11 +142,7 @@ export class SchedulerAgent extends Agent<{ AI: any }, SchedulerAgentState> {
 		}
 
 		if (action === "cancel") {
-			const scheduleId = await extractScheduleId(
-				aiModel,
-				query,
-				this.getSchedules(),
-			);
+			const scheduleId = await extractScheduleId(aiModel, query, this.getSchedules());
 
 			const schedule = scheduleId && (await this.getSchedule(scheduleId));
 
@@ -185,9 +174,7 @@ export class SchedulerAgent extends Agent<{ AI: any }, SchedulerAgentState> {
 		confirmationId: string,
 		userConfirmed: boolean,
 	): Promise<Schedule | string | false | undefined> {
-		const confirmation = this.state.confirmations.find(
-			(c) => c.id === confirmationId,
-		);
+		const confirmation = this.state.confirmations.find((c) => c.id === confirmationId);
 
 		if (!confirmation) {
 			return "No matching confirmation found.";

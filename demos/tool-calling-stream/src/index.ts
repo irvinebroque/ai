@@ -2,9 +2,8 @@ import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { streamText, tool } from "ai";
 import z from "zod";
-import { createWorkersAI } from "../../../packages/workers-ai-provider/src";
-import type { Env } from "./types/env.ts";
-import type { Variables } from "./types/hono.ts";
+import { createWorkersAI } from "workers-ai-provider";
+import type { Variables } from "./types/hono";
 
 const app = new Hono<{ Bindings: Env; Variables: Variables }>();
 app.use(cors());
@@ -12,7 +11,10 @@ app.get("/", (c) => c.json("ok"));
 
 app.post("/", async (c) => {
 	const { prompt } = (await c.req.json()) as { prompt: string };
-	const workersai = createWorkersAI({ apiKey: c.env.CLOUDFLARE_API_TOKEN, accountId: c.env.CLOUDFLARE_ACCOUNT_ID });
+	const workersai = createWorkersAI({
+		apiKey: c.env.CLOUDFLARE_API_TOKEN,
+		accountId: c.env.CLOUDFLARE_ACCOUNT_ID,
+	});
 	const model = workersai("@cf/meta/llama-3.3-70b-instruct-fp8-fast");
 
 	const result = streamText({

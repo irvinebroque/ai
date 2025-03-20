@@ -3,8 +3,7 @@ import { generateObject, generateText } from "ai";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import z from "zod";
-import type { Env } from "./types/env.ts";
-import type { Variables } from "./types/hono.ts";
+import type { Variables } from "./types/hono";
 
 const app = new Hono<{ Bindings: Env; Variables: Variables }>();
 app.use(cors());
@@ -41,7 +40,9 @@ app.post("/query", async (c) => {
 	const criteriaSchema = z.object({
 		structured: z.boolean(),
 	});
-	const criteriaPrompt = `Please evaluate the following prompt:\n\n${JSON.stringify(prompt)}\n\nReturn a JSON object with a boolean field "structured" that is true if the prompt would be best returned as a JSON structured response, or false if it should just return a text-based response.`;
+	const criteriaPrompt = `Please evaluate the following prompt:\n\n${JSON.stringify(
+		prompt,
+	)}\n\nReturn a JSON object with a boolean field "structured" that is true if the prompt would be best returned as a JSON structured response, or false if it should just return a text-based response.`;
 	const { object: evaluationObject } = await generateObject({
 		model,
 		schema: criteriaSchema,
@@ -209,10 +210,7 @@ async function fetchModelsAsJsonMap(token: string): Promise<Map<string, any>> {
 					continue;
 				}
 				const fileContents = await fileResponse.json();
-				const filenameWithoutExtension = file.name
-					.split(".")
-					.slice(0, -1)
-					.join("");
+				const filenameWithoutExtension = file.name.split(".").slice(0, -1).join("");
 				fileMap.set(filenameWithoutExtension, fileContents);
 			}
 		}

@@ -1,12 +1,7 @@
-import {
-	WorkflowEntrypoint,
-	type WorkflowEvent,
-	type WorkflowStep,
-} from "cloudflare:workers";
+import { WorkflowEntrypoint, type WorkflowEvent, type WorkflowStep } from "cloudflare:workers";
 import { generateObject } from "ai";
-import { createWorkersAI } from "../../../packages/workers-ai-provider/src";
+import { createWorkersAI } from "workers-ai-provider";
 import z from "zod";
-import type { Env } from "./types/env.ts";
 
 export type RoutingWorkflowParams = {
 	prompt: string;
@@ -20,10 +15,7 @@ const finalOutputSchema = z.object({
 	result: z.string(),
 });
 
-export class RoutingWorkflow extends WorkflowEntrypoint<
-	Env,
-	RoutingWorkflowParams
-> {
+export class RoutingWorkflow extends WorkflowEntrypoint<Env, RoutingWorkflowParams> {
 	async run(event: WorkflowEvent<{ prompt: string }>, step: WorkflowStep) {
 		const { prompt } = event.payload;
 

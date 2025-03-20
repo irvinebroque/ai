@@ -1,12 +1,7 @@
-import {
-	WorkflowEntrypoint,
-	type WorkflowEvent,
-	type WorkflowStep,
-} from "cloudflare:workers";
+import { WorkflowEntrypoint, type WorkflowEvent, type WorkflowStep } from "cloudflare:workers";
 import { generateObject } from "ai";
-import { createWorkersAI } from "../../../packages/workers-ai-provider/src";
+import { createWorkersAI } from "workers-ai-provider";
 import z from "zod";
-import type { Env } from "./types/env.ts";
 
 export type ParallelisationWorkflowParams = {
 	prompt: string;
@@ -24,10 +19,7 @@ export class ParallelisationWorkflow extends WorkflowEntrypoint<
 	Env,
 	ParallelisationWorkflowParams
 > {
-	async run(
-		event: WorkflowEvent<ParallelisationWorkflowParams>,
-		step: WorkflowStep,
-	) {
+	async run(event: WorkflowEvent<ParallelisationWorkflowParams>, step: WorkflowStep) {
 		const { prompt } = event.payload;
 
 		// Initialise Workers AI using the AI binding from the environment.
@@ -60,9 +52,7 @@ export class ParallelisationWorkflow extends WorkflowEntrypoint<
 		// Step 2: Aggregation via a Larger LLM.
 		const aggregatorResult = await step.do("aggregate responses", async () => {
 			const aggregatorPrompt = `The following responses provide diverse perspectives on a given prompt:\n\n
-				${angleOutputs
-					.map((output, index) => `Response ${index + 1}: ${output}`)
-					.join("\n\n")}
+				${angleOutputs.map((output, index) => `Response ${index + 1}: ${output}`).join("\n\n")}
 				\n\nBased on these responses, please synthesise a comprehensive final result.
 				Return your answer as a JSON object in the format { "finalResult": "Your comprehensive result here." }`;
 

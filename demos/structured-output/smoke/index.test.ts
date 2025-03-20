@@ -1,6 +1,6 @@
 import { afterAll, beforeAll, describe, expect, test } from "vitest";
 import z from "zod";
-import { DevServerTestHelper } from "test-utils/src/DevServerTestHelper.ts";
+import { DevServerTestHelper } from "test-utils/src/DevServerTestHelper";
 
 const TEST_ITERATIONS = 4;
 const PASSING_THRESHOLD = 0.75; // 75% pass rate required
@@ -24,9 +24,7 @@ describe("Structured Outputs Integration Tests", () => {
 			const schema = z.object({
 				recipe: z.object({
 					name: z.string(),
-					ingredients: z.array(
-						z.object({ name: z.string(), amount: z.string() }),
-					),
+					ingredients: z.array(z.object({ name: z.string(), amount: z.string() })),
 					steps: z.array(z.string()),
 				}),
 			});
