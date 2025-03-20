@@ -2,5 +2,5 @@
 
 interface Env {
 	OAUTH_KV: KVNamespace;
-	MY_MCP: DurableObjectNamespace<import("./src/index").MyMCP>;
+	MCP_OBJECT: DurableObjectNamespace<import("./src/index").MyMCP>;
 }
