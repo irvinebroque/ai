@@ -1,9 +1,9 @@
 {
-	"$schema": "https://biomejs.dev/schemas/2.0.6/schema.json",
+	"$schema": "https://biomejs.dev/schemas/2.1.3/schema.json",
 	"assist": {
 		"actions": {
 			"source": {
-				"useSortedKeys": "on"
+				"useSortedKeys": "off"
 			}
 		},
 		"enabled": true
@@ -24,7 +24,6 @@
 			"style": {
 				"noInferrableTypes": "error",
 				"noNonNullAssertion": "off",
-				"noParameterAssign": "error",
 				"noUnusedTemplateLiteral": "error",
 				"noUselessElse": "error",
 				"useAsConstAssertion": "error",

@@ -17,7 +17,8 @@ function McpConnection({
 	onConnectionUpdate: (data: ConnectionData) => void;
 }) {
 	// Build custom headers object
-	const customHeaders = headerKey && bearerToken ? { [headerKey]: `Bearer ${bearerToken}` } : {};
+	const customHeaders =
+		headerKey && bearerToken ? { [headerKey]: `Bearer ${bearerToken}` } : {};
 
 	// Use the MCP hook with the server URL
 	const connection = useMcp({
@@ -42,19 +43,31 @@ type ConnectionData = Omit<UseMcpResult, "state"> & {
 	state: "not-connected" | UseMcpResult["state"];
 };
 
-export function McpServers({ onToolsUpdate }: { onToolsUpdate?: (tools: any[]) => void }) {
+export function McpServers({
+	onToolsUpdate,
+}: {
+	onToolsUpdate?: (tools: any[]) => void;
+}) {
 	const [serverUrl, setServerUrl] = useState(() => {
 		return sessionStorage.getItem("mcpServerUrl") || "";
 	});
-	const [transportType, _setTransportType] = useState<"auto" | "http" | "sse">(() => {
-		return (sessionStorage.getItem("mcpTransportType") as "auto" | "http" | "sse") || "auto";
-	});
+	const [transportType, _setTransportType] = useState<"auto" | "http" | "sse">(
+		() => {
+			return (
+				(sessionStorage.getItem("mcpTransportType") as
+					| "auto"
+					| "http"
+					| "sse") || "auto"
+			);
+		},
+	);
 	const [isActive, setIsActive] = useState(false);
 	const [showSettings, setShowSettings] = useState(true);
 	const [connectionData, setConnectionData] = useState<ConnectionData>({
 		authenticate: () => Promise.resolve(undefined),
 		authUrl: undefined,
-		callTool: (_name: string, _args?: Record<string, unknown>) => Promise.resolve(undefined),
+		callTool: (_name: string, _args?: Record<string, unknown>) =>
+			Promise.resolve(undefined),
 		clearStorage: () => {},
 		disconnect: () => {},
 		error: undefined,
@@ -62,6 +75,13 @@ export function McpServers({ onToolsUpdate }: { onToolsUpdate?: (tools: any[]) =
 		retry: () => {},
 		state: "not-connected",
 		tools: [],
+		resources: [],
+		resourceTemplates: [],
+		readResource: async () => ({ contents: [] }),
+		prompts: [],
+		listPrompts: async () => {},
+		getPrompt: async () => ({ messages: [] }),
+		listResources: async () => {},
 	});
 	const logRef = useRef<HTMLDivElement>(null);
 	const [showAuth, setShowAuth] = useState<boolean>(false);
@@ -119,6 +139,13 @@ export function McpServers({ onToolsUpdate }: { onToolsUpdate?: (tools: any[]) =
 			retry: () => {},
 			state: "not-connected",
 			tools: [],
+			resources: [],
+			resourceTemplates: [],
+			prompts: [],
+			listResources: async () => {},
+			readResource: async () => ({ contents: [] }),
+			listPrompts: async () => {},
+			getPrompt: async () => ({ messages: [] }),
 		});
 	};
 
@@ -173,6 +200,10 @@ export function McpServers({ onToolsUpdate }: { onToolsUpdate?: (tools: any[]) =
 			"not-connected": {
 				colors: "bg-gray-100 text-gray-800",
 				label: "Not Connected",
+			},
+			pending_auth: {
+				colors: "bg-purple-100 text-purple-800",
+				label: "Pending Authentication",
 			},
 		};
 
