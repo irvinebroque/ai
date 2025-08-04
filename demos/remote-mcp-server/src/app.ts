@@ -57,9 +57,12 @@ app.get("/authorize", async (c) => {
 // This endpoint is responsible for validating any login information and
 // then completing the authorization request with the OAUTH_PROVIDER
 app.post("/approve", async (c) => {
-	const { action, oauthReqInfo, email, password } = await parseApproveFormBody(
-		await c.req.parseBody(),
-	);
+	const {
+		action,
+		oauthReqInfo,
+		email,
+		password: _password,
+	} = await parseApproveFormBody(await c.req.parseBody());
 
 	if (!oauthReqInfo) {
 		return c.html("INVALID LOGIN", 401);

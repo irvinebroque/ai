@@ -1,4 +1,4 @@
-import { AuthRequest } from "@cloudflare/workers-oauth-provider";
+import type { AuthRequest } from "@cloudflare/workers-oauth-provider";
 
 export type Props = {
 	userId: string;

@@ -14,33 +14,28 @@ import { DescopeMcpProvider } from "./provider";
  *  const app = new Hono();
  *  app.route("/", descopeMcpAuthRouter(...));
  */
-export function descopeMcpAuthRouter(
-  provider?: DescopeMcpProvider,
-): Hono {
-  const authProvider = provider || new DescopeMcpProvider();
+export function descopeMcpAuthRouter(provider?: DescopeMcpProvider): Hono {
+	const authProvider = provider || new DescopeMcpProvider();
 
-  const router = new Hono();
+	const router = new Hono();
 
-  // As stated in OAuth 2.1, section 1.4.1:
-  //
-  // "If the client omits the scope parameter when requesting
-  // authorization, the authorization server MUST either process the
-  // request using a pre-defined default value or fail the request
-  // indicating an invalid scope.  The authorization server SHOULD
-  // document its scope requirements and default value (if defined)."
-  //
-  // By default, Descope fails the request when the scope is undefined.
-  // This is a workaround to instead use a default scope.
-  router.route("/authorize", authorizationHandler(authProvider));
+	// As stated in OAuth 2.1, section 1.4.1:
+	//
+	// "If the client omits the scope parameter when requesting
+	// authorization, the authorization server MUST either process the
+	// request using a pre-defined default value or fail the request
+	// indicating an invalid scope.  The authorization server SHOULD
+	// document its scope requirements and default value (if defined)."
+	//
+	// By default, Descope fails the request when the scope is undefined.
+	// This is a workaround to instead use a default scope.
+	router.route("/authorize", authorizationHandler(authProvider));
 
-  router.route(
-    "/.well-known/oauth-authorization-server",
-    metadataHandler(authProvider),
-  );
+	router.route("/.well-known/oauth-authorization-server", metadataHandler(authProvider));
 
-  if (!authProvider.options.dynamicClientRegistrationOptions?.isDisabled) {
-    router.route("/register", registrationHandler(authProvider));
-  }
+	if (!authProvider.options.dynamicClientRegistrationOptions?.isDisabled) {
+		router.route("/register", registrationHandler(authProvider));
+	}
 
-  return router;
+	return router;
 }

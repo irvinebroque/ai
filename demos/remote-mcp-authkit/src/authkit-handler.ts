@@ -1,14 +1,7 @@
-import type {
-	AuthRequest,
-	OAuthHelpers,
-} from "@cloudflare/workers-oauth-provider";
+import type { AuthRequest, OAuthHelpers } from "@cloudflare/workers-oauth-provider";
 import { Hono } from "hono";
 import * as jose from "jose";
-import {
-	type AccessToken,
-	type AuthenticationResponse,
-	WorkOS,
-} from "@workos-inc/node";
+import { type AccessToken, type AuthenticationResponse, WorkOS } from "@workos-inc/node";
 import type { Props } from "./props";
 
 const app = new Hono<{
@@ -33,7 +26,7 @@ app.get("/authorize", async (c) => {
 			clientId: c.env.WORKOS_CLIENT_ID,
 			redirectUri: new URL("/callback", c.req.url).href,
 			state: btoa(JSON.stringify(oauthReqInfo)),
-		})
+		}),
 	);
 });
 
@@ -41,9 +34,7 @@ app.get("/callback", async (c) => {
 	const workOS = c.get("workOS");
 
 	// Get the oathReqInfo out of KV
-	const oauthReqInfo = JSON.parse(
-		atob(c.req.query("state") as string)
-	) as AuthRequest;
+	const oauthReqInfo = JSON.parse(atob(c.req.query("state") as string)) as AuthRequest;
 	if (!oauthReqInfo.clientId) {
 		return c.text("Invalid state", 400);
 	}
