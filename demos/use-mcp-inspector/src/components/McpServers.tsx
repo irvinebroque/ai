@@ -48,6 +48,13 @@ export function McpServers({ onToolsUpdate }: { onToolsUpdate?: (tools: Tool[]) 
 		retry: () => {},
 		state: "not-connected",
 		tools: [],
+		resources: [],
+		resourceTemplates: [],
+		prompts: [],
+		listResources: async () => {},
+		readResource: async () => ({ contents: [] }),
+		listPrompts: async () => {},
+		getPrompt: async () => ({ messages: [] }),
 	});
 	const [toolForms, setToolForms] = useState<Record<string, Record<string, any>>>({});
 	const [toolExecutionLogs, setToolExecutionLogs] = useState<Record<string, string>>({});
@@ -100,6 +107,13 @@ export function McpServers({ onToolsUpdate }: { onToolsUpdate?: (tools: Tool[]) 
 			retry: () => {},
 			state: "not-connected",
 			tools: [],
+			resources: [],
+			resourceTemplates: [],
+			prompts: [],
+			listResources: async () => {},
+			readResource: async () => ({ contents: [] }),
+			listPrompts: async () => {},
+			getPrompt: async () => ({ messages: [] }),
 		});
 	};
 

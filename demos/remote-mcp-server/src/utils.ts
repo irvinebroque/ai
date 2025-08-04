@@ -14,10 +14,7 @@ export const layout = (content: HtmlEscapedString | string, title: string) => ht
 	<html lang="en">
 		<head>
 			<meta charset="UTF-8" />
-			<meta
-				name="viewport"
-				content="width=device-width, initial-scale=1.0"
-			/>
+			<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 			<title>${title}</title>
 			<script src="https://cdn.tailwindcss.com"></script>
 			<script>
@@ -159,14 +156,12 @@ export const layout = (content: HtmlEscapedString | string, title: string) => ht
 					>
 				</div>
 			</header>
-			<main class="container mx-auto px-4 pb-12 flex-grow">
-				${content}
-			</main>
+			<main class="container mx-auto px-4 pb-12 flex-grow">${content}</main>
 			<footer class="bg-gray-100 py-6 mt-12">
 				<div class="container mx-auto px-4 text-center text-gray-600">
 					<p>
-						&copy; ${new Date().getFullYear()} MCP Remote Auth Demo.
-						All rights reserved.
+						&copy; ${new Date().getFullYear()} MCP Remote Auth Demo. All rights
+						reserved.
 					</p>
 				</div>
 			</footer>
@@ -181,9 +176,7 @@ export const homeContent = async (req: Request): Promise<HtmlEscapedString> => {
 	const res = await env.ASSETS.fetch(`${origin}/README.md`);
 	const markdown = await res.text();
 	const content = await marked(markdown);
-	return html`
-		<div class="max-w-4xl mx-auto markdown">${raw(content)}</div>
-	`;
+	return html` <div class="max-w-4xl mx-auto markdown">${raw(content)}</div> `;
 };
 
 export const renderLoggedInAuthorizeScreen = async (
@@ -204,15 +197,10 @@ export const renderLoggedInAuthorizeScreen = async (
 					${oauthScopes.map(
 						(scope) => html`
 							<li class="flex items-start">
-								<span
-									class="inline-block mr-2 mt-1 text-secondary"
-									>✓</span
-								>
+								<span class="inline-block mr-2 mt-1 text-secondary">✓</span>
 								<div>
 									<p class="font-medium">${scope.name}</p>
-									<p class="text-gray-600 text-sm">
-										${scope.description}
-									</p>
+									<p class="text-gray-600 text-sm">${scope.description}</p>
 								</div>
 							</li>
 						`,
@@ -265,15 +253,10 @@ export const renderLoggedOutAuthorizeScreen = async (
 					${oauthScopes.map(
 						(scope) => html`
 							<li class="flex items-start">
-								<span
-									class="inline-block mr-2 mt-1 text-secondary"
-									>✓</span
-								>
+								<span class="inline-block mr-2 mt-1 text-secondary">✓</span>
 								<div>
 									<p class="font-medium">${scope.name}</p>
-									<p class="text-gray-600 text-sm">
-										${scope.description}
-									</p>
+									<p class="text-gray-600 text-sm">${scope.description}</p>
 								</div>
 							</li>
 						`,
@@ -343,9 +326,7 @@ export const renderApproveContent = async (
 	redirectUrl: string,
 ) => {
 	return html`
-		<div
-			class="max-w-md mx-auto bg-white p-8 rounded-lg shadow-md text-center"
-		>
+		<div class="max-w-md mx-auto bg-white p-8 rounded-lg shadow-md text-center">
 			<div class="mb-4">
 				<span
 					class="inline-block p-3 ${
@@ -388,16 +369,14 @@ export const renderAuthorizationRejectedContent = async (redirectUrl: string) =>
 	return renderApproveContent("Authorization rejected.", "error", redirectUrl);
 };
 
-export const parseApproveFormBody = async (body: {
-	[x: string]: string | File;
-}) => {
+export const parseApproveFormBody = async (body: { [x: string]: string | File }) => {
 	const action = body.action as string;
 	const email = body.email as string;
 	const password = body.password as string;
 	let oauthReqInfo: AuthRequest | null = null;
 	try {
 		oauthReqInfo = JSON.parse(body.oauthReqInfo as string) as AuthRequest;
-	} catch (e) {
+	} catch (_e) {
 		oauthReqInfo = null;
 	}
 

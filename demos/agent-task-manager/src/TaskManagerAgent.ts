@@ -21,10 +21,8 @@ export class TaskManagerAgent extends Agent<{ AI: Ai }, TaskManagerState> {
 	};
 
 	async query(
-		query: string
-	): Promise<
-		{ message?: string } | Task | Task[] | boolean | string | undefined
-	> {
+		query: string,
+	): Promise<{ message?: string } | Task | Task[] | boolean | string | undefined> {
 		const workersai = createWorkersAI({ binding: this.env.AI });
 		const aiModel = workersai("@cf/meta/llama-3.3-70b-instruct-fp8-fast");
 
@@ -84,8 +82,7 @@ export class TaskManagerAgent extends Agent<{ AI: Ai }, TaskManagerState> {
 
 			if (!object.title) {
 				return {
-					message:
-						"Was not able to extract a title from the provided prompt.",
+					message: "Was not able to extract a title from the provided prompt.",
 				};
 			}
 
@@ -152,9 +149,7 @@ export class TaskManagerAgent extends Agent<{ AI: Ai }, TaskManagerState> {
 
 	deleteTask(taskId: string): string | false {
 		const initialLength = this.state.tasks.length;
-		const filteredTasks = this.state.tasks.filter(
-			(task) => task.id !== taskId
-		);
+		const filteredTasks = this.state.tasks.filter((task) => task.id !== taskId);
 
 		if (initialLength === filteredTasks.length) {
 			return false; // Task not found

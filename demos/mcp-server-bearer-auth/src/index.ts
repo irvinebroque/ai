@@ -21,13 +21,9 @@ export class MyMCP extends McpAgent<Env, State, Props> {
 	});
 
 	async init() {
-		this.server.tool(
-			"add",
-			{ a: z.number(), b: z.number() },
-			async ({ a, b }) => ({
-				content: [{ type: "text", text: String(a + b) }],
-			})
-		);
+		this.server.tool("add", { a: z.number(), b: z.number() }, async ({ a, b }) => ({
+			content: [{ type: "text", text: String(a + b) }],
+		}));
 
 		// Tool that returns the user's bearer token
 		// This is just for demonstration purposes, don't actually create a tool that does this!

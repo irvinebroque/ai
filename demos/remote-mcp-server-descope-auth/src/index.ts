@@ -1,7 +1,7 @@
 import { McpAgent } from "agents/mcp";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
-import { Context, Hono } from "hono";
+import { type Context, Hono } from "hono";
 import { layout, homeContent } from "./utils";
 import { DescopeMcpProvider } from "./descope-hono/provider";
 import { descopeMcpAuthRouter } from "./descope-hono/router";
@@ -41,11 +41,13 @@ export class MyMCP extends McpAgent<Bindings, State, Props> {
 const app = new Hono<{ Bindings: Bindings }>();
 
 // Apply CORS middleware
-app.use(cors({
-	origin: "*",
-	allowHeaders: ["Content-Type", "Authorization", "mcp-protocol-version"],
-	maxAge: 86400,
-}));
+app.use(
+	cors({
+		origin: "*",
+		allowHeaders: ["Content-Type", "Authorization", "mcp-protocol-version"],
+		maxAge: 86400,
+	}),
+);
 
 // Homepage route
 app.get("/", async (c) => {
@@ -55,7 +57,7 @@ app.get("/", async (c) => {
 
 // OAuth routes handler
 const handleOAuthRoute = async (c: Context) => {
-	const provider = new DescopeMcpProvider({}, { env: c.env })
+	const provider = new DescopeMcpProvider({}, { env: c.env });
 	const router = descopeMcpAuthRouter(provider);
 	return router.fetch(c.req.raw, c.env, c.executionCtx);
 };
@@ -67,12 +69,15 @@ app.use("/register", handleOAuthRoute);
 
 // Protected MCP routes
 app.use("/sse/*", descopeMcpBearerAuth());
-app.route("/sse", new Hono().mount("/", (req, env, ctx) => {
-	const authHeader = req.headers.get("authorization");
-	ctx.props = {
-		bearerToken: authHeader,
-	};
-	return MyMCP.mount("/sse").fetch(req, env, ctx);
-}));
+app.route(
+	"/sse",
+	new Hono().mount("/", (req, env, ctx) => {
+		const authHeader = req.headers.get("authorization");
+		ctx.props = {
+			bearerToken: authHeader,
+		};
+		return MyMCP.mount("/sse").fetch(req, env, ctx);
+	}),
+);
 
 export default app;

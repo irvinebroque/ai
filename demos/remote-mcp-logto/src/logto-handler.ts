@@ -3,9 +3,9 @@ import type { OAuthHelpers } from "@cloudflare/workers-oauth-provider";
 import { renderApprovalDialog } from "./workers-oauth-utils";
 import { env } from "cloudflare:workers";
 
-import { LogtoConfig } from "@logto/node";
+import type { LogtoConfig } from "@logto/node";
 import { LogtoHonoClient } from "./logto";
-import { AuthInteractionSession, Props } from "./types";
+import type { AuthInteractionSession, Props } from "./types";
 import { getCookie, setCookie } from "hono/cookie";
 
 const logtoConfig: LogtoConfig = {
@@ -19,9 +19,7 @@ const sessionCookieName = "auth-session";
 const app = new Hono<{ Bindings: Env & { OAUTH_PROVIDER: OAuthHelpers } }>();
 
 app.get("/authorize", async (c) => {
-	const mcpAuthRequestInfo = await c.env.OAUTH_PROVIDER.parseAuthRequest(
-		c.req.raw
-	);
+	const mcpAuthRequestInfo = await c.env.OAUTH_PROVIDER.parseAuthRequest(c.req.raw);
 	const { clientId } = mcpAuthRequestInfo;
 
 	if (!clientId) {
@@ -35,24 +33,19 @@ app.get("/authorize", async (c) => {
 		mcpAuthRequestInfo,
 	};
 
-	setCookie(
-		c,
-		sessionCookieName,
-		btoa(JSON.stringify(authInteractionSession)),
-		{
-			path: "/",
-			httpOnly: true,
-			/**
-			 * NOTE: Development environment only!
-			 * For production:
-			 * - Set secure: true to ensure cookies are only sent over HTTPS
-			 * - Consider using sameSite: "strict" for better CSRF protection
-			 */
-			secure: false,
-			sameSite: "lax",
-			maxAge: 60 * 60 * 1, // 1 hour
-		}
-	);
+	setCookie(c, sessionCookieName, btoa(JSON.stringify(authInteractionSession)), {
+		path: "/",
+		httpOnly: true,
+		/**
+		 * NOTE: Development environment only!
+		 * For production:
+		 * - Set secure: true to ensure cookies are only sent over HTTPS
+		 * - Consider using sameSite: "strict" for better CSRF protection
+		 */
+		secure: false,
+		sameSite: "lax",
+		maxAge: 60 * 60 * 1, // 1 hour
+	});
 
 	return c.html(
 		renderApprovalDialog(c.req.raw, {
@@ -60,11 +53,10 @@ app.get("/authorize", async (c) => {
 			server: {
 				name: "Cloudflare Logto MCP Server",
 				logo: "https://avatars.githubusercontent.com/u/84981374?s=200&v=4",
-				description:
-					"This is a demo MCP Remote Server using Logto for authentication.", // optional
+				description: "This is a demo MCP Remote Server using Logto for authentication.", // optional
 			},
 			csrfToken: sessionId,
-		})
+		}),
 	);
 });
 
@@ -82,9 +74,7 @@ app.post("/authorize", async (c) => {
 		return c.text("Invalid request", 400);
 	}
 
-	const interactionSession = JSON.parse(
-		atob(interactionSessionCookie)
-	) as AuthInteractionSession;
+	const interactionSession = JSON.parse(atob(interactionSessionCookie)) as AuthInteractionSession;
 
 	const { sessionId, mcpAuthRequestInfo } = interactionSession;
 
@@ -108,9 +98,7 @@ app.get("/callback", async (c) => {
 		return c.text("Invalid request", 400);
 	}
 
-	const interactionSession = JSON.parse(
-		atob(interactionSessionCookie)
-	) as AuthInteractionSession;
+	const interactionSession = JSON.parse(atob(interactionSessionCookie)) as AuthInteractionSession;
 
 	if (!interactionSession) {
 		return c.text("Invalid request", 400);

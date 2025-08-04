@@ -62,6 +62,13 @@ export function McpServers({ onToolsUpdate }: { onToolsUpdate?: (tools: any[]) =
 		retry: () => {},
 		state: "not-connected",
 		tools: [],
+		resources: [],
+		resourceTemplates: [],
+		readResource: async () => ({ contents: [] }),
+		prompts: [],
+		listPrompts: async () => {},
+		getPrompt: async () => ({ messages: [] }),
+		listResources: async () => {},
 	});
 	const logRef = useRef<HTMLDivElement>(null);
 	const [showAuth, setShowAuth] = useState<boolean>(false);
@@ -119,6 +126,13 @@ export function McpServers({ onToolsUpdate }: { onToolsUpdate?: (tools: any[]) =
 			retry: () => {},
 			state: "not-connected",
 			tools: [],
+			resources: [],
+			resourceTemplates: [],
+			prompts: [],
+			listResources: async () => {},
+			readResource: async () => ({ contents: [] }),
+			listPrompts: async () => {},
+			getPrompt: async () => ({ messages: [] }),
 		});
 	};
 
@@ -173,6 +187,10 @@ export function McpServers({ onToolsUpdate }: { onToolsUpdate?: (tools: any[]) =
 			"not-connected": {
 				colors: "bg-gray-100 text-gray-800",
 				label: "Not Connected",
+			},
+			pending_auth: {
+				colors: "bg-purple-100 text-purple-800",
+				label: "Pending Authentication",
 			},
 		};
 

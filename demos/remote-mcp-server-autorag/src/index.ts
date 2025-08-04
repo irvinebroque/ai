@@ -11,22 +11,26 @@ export class MyMCP extends McpAgent {
 	});
 
 	async init() {
-		this.server.tool("Query AutoRAG <insert tool description here>", { query: z.string() }, async ({ query }) => {
-			const answer = await this.env.AI.autorag("add-name-of-your-autorag-here").aiSearch({
-				query,
-				model: "@cf/meta/llama-3.3-70b-instruct-sd",
-				rewrite_query: true,
-				max_num_results: 2,
-				ranking_options: {
-				  score_threshold: 0.7,
-				},
-				stream: false,
-			  });
+		this.server.tool(
+			"Query AutoRAG <insert tool description here>",
+			{ query: z.string() },
+			async ({ query }) => {
+				const answer = await this.env.AI.autorag("add-name-of-your-autorag-here").aiSearch({
+					query,
+					model: "@cf/meta/llama-3.3-70b-instruct-sd",
+					rewrite_query: true,
+					max_num_results: 2,
+					ranking_options: {
+						score_threshold: 0.7,
+					},
+					stream: false,
+				});
 
-			return {
-				content: [{ type: "text", text: answer }],
-			};	
-		});
+				return {
+					content: [{ type: "text", text: answer }],
+				};
+			},
+		);
 	}
 }
 

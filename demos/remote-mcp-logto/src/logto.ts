@@ -1,11 +1,14 @@
-import LogtoClient, { LogtoConfig } from "@logto/node";
+import LogtoClient, { type LogtoConfig } from "@logto/node";
 import { createSessionStorage } from "./storage";
 
 export class LogtoHonoClient {
 	private redirectResponse: Response;
 	private nodeClient: LogtoClient;
 
-	constructor(private logtoConfig: LogtoConfig, sessionId: string) {
+	constructor(
+		private logtoConfig: LogtoConfig,
+		sessionId: string,
+	) {
 		this.redirectResponse = new Response(null, { status: 302 });
 
 		this.nodeClient = new LogtoClient(this.logtoConfig, {

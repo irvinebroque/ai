@@ -1,4 +1,4 @@
-import { MiddlewareHandler } from "hono";
+import type { MiddlewareHandler } from "hono";
 import { MethodNotAllowedError } from "../errors";
 
 /**
@@ -9,17 +9,15 @@ import { MethodNotAllowedError } from "../errors";
  * @throws {MethodNotAllowedError} When an unsupported HTTP method is used
  */
 export function allowedMethods(allowedMethods: string[]): MiddlewareHandler {
-  return async (c, next) => {
-    if (allowedMethods.includes(c.req.method)) {
-      await next();
-      return;
-    }
+	return async (c, next) => {
+		if (allowedMethods.includes(c.req.method)) {
+			await next();
+			return;
+		}
 
-    const error = new MethodNotAllowedError(
-      `Method "${c.req.method}" is not allowed`,
-    );
-    
-    c.header("Allow", allowedMethods.join(", "));
-    return c.json(error.toResponseObject(), 405);
-  };
+		const error = new MethodNotAllowedError(`Method "${c.req.method}" is not allowed`);
+
+		c.header("Allow", allowedMethods.join(", "));
+		return c.json(error.toResponseObject(), 405);
+	};
 }

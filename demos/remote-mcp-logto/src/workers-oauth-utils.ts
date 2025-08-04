@@ -7,28 +7,28 @@
  * - Changed return type to string instead of Response
  */
 
-import type { ClientInfo } from '@cloudflare/workers-oauth-provider';
+import type { ClientInfo } from "@cloudflare/workers-oauth-provider";
 
 /**
  * Configuration for the approval dialog
  */
 export interface ApprovalDialogOptions {
-  /**
-   * Client information to display in the approval dialog
-   */
-  client: ClientInfo | null
-  /**
-   * Server information to display in the approval dialog
-   */
-  server: {
-    name: string
-    logo?: string
-    description?: string
-  },
-  /**
-   * CSRF token to prevent CSRF attacks
-   */
-  csrfToken: string
+	/**
+	 * Client information to display in the approval dialog
+	 */
+	client: ClientInfo | null;
+	/**
+	 * Server information to display in the approval dialog
+	 */
+	server: {
+		name: string;
+		logo?: string;
+		description?: string;
+	};
+	/**
+	 * CSRF token to prevent CSRF attacks
+	 */
+	csrfToken: string;
 }
 
 /**
@@ -41,31 +41,33 @@ export interface ApprovalDialogOptions {
  * @returns A Response containing the HTML approval dialog
  */
 export function renderApprovalDialog(request: Request, options: ApprovalDialogOptions): string {
-  const {
-	 client,
-	 server,
-	 csrfToken
-  } = options
+	const { client, server, csrfToken } = options;
 
-  // Sanitize any untrusted content
-  const serverName = sanitizeHtml(server.name)
-  const clientName = client?.clientName ? sanitizeHtml(client.clientName) : 'Unknown MCP Client'
-  const serverDescription = server.description ? sanitizeHtml(server.description) : ''
+	// Sanitize any untrusted content
+	const serverName = sanitizeHtml(server.name);
+	const clientName = client?.clientName ? sanitizeHtml(client.clientName) : "Unknown MCP Client";
+	const serverDescription = server.description ? sanitizeHtml(server.description) : "";
 
-  // Safe URLs
-  const logoUrl = server.logo ? sanitizeHtml(server.logo) : ''
-  const clientUri = client?.clientUri ? sanitizeHtml(client.clientUri) : ''
-  const policyUri = client?.policyUri ? sanitizeHtml(client.policyUri) : ''
-  const tosUri = client?.tosUri ? sanitizeHtml(client.tosUri) : ''
+	// Safe URLs
+	const logoUrl = server.logo ? sanitizeHtml(server.logo) : "";
+	const clientUri = client?.clientUri ? sanitizeHtml(client.clientUri) : "";
+	const policyUri = client?.policyUri ? sanitizeHtml(client.policyUri) : "";
+	const tosUri = client?.tosUri ? sanitizeHtml(client.tosUri) : "";
 
-  // Client contacts
-  const contacts = client?.contacts && client.contacts.length > 0 ? sanitizeHtml(client.contacts.join(', ')) : ''
+	// Client contacts
+	const contacts =
+		client?.contacts && client.contacts.length > 0
+			? sanitizeHtml(client.contacts.join(", "))
+			: "";
 
-  // Get redirect URIs
-  const redirectUris = client?.redirectUris && client.redirectUris.length > 0 ? client.redirectUris.map((uri) => sanitizeHtml(uri)) : []
+	// Get redirect URIs
+	const redirectUris =
+		client?.redirectUris && client.redirectUris.length > 0
+			? client.redirectUris.map((uri) => sanitizeHtml(uri))
+			: [];
 
-  // Generate HTML for the approval dialog
-  const htmlContent = `
+	// Generate HTML for the approval dialog
+	const htmlContent = `
     <!DOCTYPE html>
     <html lang="en">
       <head>
@@ -250,16 +252,16 @@ export function renderApprovalDialog(request: Request, options: ApprovalDialogOp
         <div class="container">
           <div class="precard">
             <div class="header">
-              ${logoUrl ? `<img src="${logoUrl}" alt="${serverName} Logo" class="logo">` : ''}
+              ${logoUrl ? `<img src="${logoUrl}" alt="${serverName} Logo" class="logo">` : ""}
             <h1 class="title"><strong>${serverName}</strong></h1>
             </div>
 
-            ${serverDescription ? `<p class="description">${serverDescription}</p>` : ''}
+            ${serverDescription ? `<p class="description">${serverDescription}</p>` : ""}
           </div>
 
           <div class="card">
 
-            <h2 class="alert"><strong>${clientName || 'A new MCP Client'}</strong> is requesting access</h1>
+            <h2 class="alert"><strong>${clientName || "A new MCP Client"}</strong> is requesting access</h1>
 
             <div class="client-info">
               <div class="client-detail">
@@ -270,8 +272,8 @@ export function renderApprovalDialog(request: Request, options: ApprovalDialogOp
               </div>
 
               ${
-                clientUri
-                  ? `
+					clientUri
+						? `
                 <div class="client-detail">
                   <div class="detail-label">Website:</div>
                   <div class="detail-value small">
@@ -281,12 +283,12 @@ export function renderApprovalDialog(request: Request, options: ApprovalDialogOp
                   </div>
                 </div>
               `
-                  : ''
-              }
+						: ""
+				}
 
               ${
-                policyUri
-                  ? `
+					policyUri
+						? `
                 <div class="client-detail">
                   <div class="detail-label">Privacy Policy:</div>
                   <div class="detail-value">
@@ -296,12 +298,12 @@ export function renderApprovalDialog(request: Request, options: ApprovalDialogOp
                   </div>
                 </div>
               `
-                  : ''
-              }
+						: ""
+				}
 
               ${
-                tosUri
-                  ? `
+					tosUri
+						? `
                 <div class="client-detail">
                   <div class="detail-label">Terms of Service:</div>
                   <div class="detail-value">
@@ -311,32 +313,32 @@ export function renderApprovalDialog(request: Request, options: ApprovalDialogOp
                   </div>
                 </div>
               `
-                  : ''
-              }
+						: ""
+				}
 
               ${
-                redirectUris.length > 0
-                  ? `
+					redirectUris.length > 0
+						? `
                 <div class="client-detail">
                   <div class="detail-label">Redirect URIs:</div>
                   <div class="detail-value small">
-                    ${redirectUris.map((uri) => `<div>${uri}</div>`).join('')}
+                    ${redirectUris.map((uri) => `<div>${uri}</div>`).join("")}
                   </div>
                 </div>
               `
-                  : ''
-              }
+						: ""
+				}
 
               ${
-                contacts
-                  ? `
+					contacts
+						? `
                 <div class="client-detail">
                   <div class="detail-label">Contact:</div>
                   <div class="detail-value">${contacts}</div>
                 </div>
               `
-                  : ''
-              }
+						: ""
+				}
             </div>
 
             <p>This MCP Client is requesting to be authorized on ${serverName}. If you approve, you will be redirected to complete authentication.</p>
@@ -354,7 +356,7 @@ export function renderApprovalDialog(request: Request, options: ApprovalDialogOp
     </html>
   `;
 
-  return htmlContent;
+	return htmlContent;
 }
 
 /**
@@ -363,5 +365,10 @@ export function renderApprovalDialog(request: Request, options: ApprovalDialogOp
  * @returns A safe string with HTML special characters escaped
  */
 function sanitizeHtml(unsafe: string): string {
-  return unsafe.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;')
+	return unsafe
+		.replace(/&/g, "&amp;")
+		.replace(/</g, "&lt;")
+		.replace(/>/g, "&gt;")
+		.replace(/"/g, "&quot;")
+		.replace(/'/g, "&#039;");
 }
