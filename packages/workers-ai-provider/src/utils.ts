@@ -272,7 +272,7 @@ export function processPartialToolCalls(partialToolCalls: any[]) {
 
 export function processText(output: AiTextGenerationOutput): string | undefined {
 	// @ts-expect-error OpenAI format not typed yet
-	if (output?.choices?.[0]?.message?.content.length) {
+	if (output?.choices?.[0]?.message?.content?.length) {
 		// @ts-expect-error OpenAI format not typed yet
 		return output?.choices?.[0]?.message?.content;
 	}
