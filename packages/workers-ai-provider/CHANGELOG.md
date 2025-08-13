@@ -1,5 +1,11 @@
 # workers-ai-provider
 
+## 0.7.3
+
+### Patch Changes
+
+- [#258](https://github.com/cloudflare/ai/pull/258) [`b1ee224`](https://github.com/cloudflare/ai/commit/b1ee22414e30533082bdfebf1f89a3c828ca5b6d) Thanks [@threepointone](https://github.com/threepointone)! - fix: don't crash if a model response has only tool calls
+
 ## 0.7.2
 
 ### Patch Changes
