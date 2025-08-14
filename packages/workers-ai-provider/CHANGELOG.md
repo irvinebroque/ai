@@ -1,5 +1,11 @@
 # workers-ai-provider
 
+## 0.7.4
+
+### Patch Changes
+
+- [#261](https://github.com/cloudflare/ai/pull/261) [`50fad0f`](https://github.com/cloudflare/ai/commit/50fad0f41431b4db469c1d500e116386c82c0500) Thanks [@threepointone](https://github.com/threepointone)! - fix: pass a tool call id and read it back out for tool calls
+
 ## 0.7.3
 
 ### Patch Changes
