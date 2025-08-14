@@ -102,7 +102,7 @@ export function convertToWorkersAIChatMessages(prompt: LanguageModelV1Prompt): {
 						toolCalls.length > 0
 							? toolCalls.map(({ function: { name, arguments: args } }) => ({
 									function: { arguments: args, name },
-									id: "null",
+									id: `tool_call_${name}_${Date.now()}`,
 									type: "function",
 								}))
 							: undefined,
@@ -116,6 +116,8 @@ export function convertToWorkersAIChatMessages(prompt: LanguageModelV1Prompt): {
 					messages.push({
 						content: JSON.stringify(toolResponse.result),
 						name: toolResponse.toolName,
+						// @ts-expect-error - need to update types
+						tool_id: toolResponse.toolCallId,
 						role: "tool",
 					});
 				}
