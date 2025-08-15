@@ -1,5 +1,11 @@
 # workers-ai-provider
 
+## 0.7.5
+
+### Patch Changes
+
+- [#263](https://github.com/cloudflare/ai/pull/263) [`7b2745a`](https://github.com/cloudflare/ai/commit/7b2745a9d6e6742308a342c2f1b57c6597c24779) Thanks [@byule](https://github.com/byule)! - fix: use correct fieldname and format for tool_call ids
+
 ## 0.7.4
 
 ### Patch Changes
