@@ -18,7 +18,7 @@
 		"hono": "^4.8.12",
 		"react": "^19.1.1",
 		"react-dom": "^19.1.1",
-		"workers-ai-provider": "0.7.4",
+		"workers-ai-provider": "0.7.5",
 		"zod": "^3.25.67"
 	},
 	"devDependencies": {
