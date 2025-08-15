@@ -100,9 +100,9 @@ export function convertToWorkersAIChatMessages(prompt: LanguageModelV1Prompt): {
 					role: "assistant",
 					tool_calls:
 						toolCalls.length > 0
-							? toolCalls.map(({ function: { name, arguments: args } }) => ({
+							? toolCalls.map(({ function: { name, arguments: args } }, index) => ({
 									function: { arguments: args, name },
-									id: `tool_call_${name}_${Date.now()}`,
+									id: `functions.${name}:${index}`,
 									type: "function",
 								}))
 							: undefined,
@@ -112,12 +112,11 @@ export function convertToWorkersAIChatMessages(prompt: LanguageModelV1Prompt): {
 			}
 
 			case "tool": {
-				for (const toolResponse of content) {
+				for (const [index, toolResponse] of content.entries()) {
 					messages.push({
 						content: JSON.stringify(toolResponse.result),
 						name: toolResponse.toolName,
-						// @ts-expect-error - need to update types
-						tool_id: toolResponse.toolCallId,
+						tool_call_id: `functions.${toolResponse.toolName}:${index}`,
 						role: "tool",
 					});
 				}
