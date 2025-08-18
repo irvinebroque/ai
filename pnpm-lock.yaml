@@ -24,8 +24,8 @@ importers:
         specifier: ^0.11.0
         version: 0.11.0
       '@cloudflare/workers-oauth-provider':
-        specifier: ^0.0.5
-        version: 0.0.5
+        specifier: ^0.0.6
+        version: 0.0.6
       '@langchain/core':
         specifier: ^0.3.66
         version: 0.3.66(@opentelemetry/api@1.9.0)(openai@4.92.1(ws@8.18.0)(zod@3.25.67))
@@ -357,8 +357,8 @@ importers:
   demos/mcp-server-bearer-auth:
     dependencies:
       '@cloudflare/workers-oauth-provider':
-        specifier: ^0.0.5
-        version: 0.0.5
+        specifier: ^0.0.6
+        version: 0.0.6
       '@modelcontextprotocol/sdk':
         specifier: 1.17.1
         version: 1.17.1
@@ -388,8 +388,8 @@ importers:
   demos/mcp-slack-oauth:
     dependencies:
       '@cloudflare/workers-oauth-provider':
-        specifier: ^0.0.5
-        version: 0.0.5
+        specifier: ^0.0.6
+        version: 0.0.6
       '@modelcontextprotocol/sdk':
         specifier: 1.17.1
         version: 1.17.1
@@ -752,8 +752,8 @@ importers:
   demos/remote-mcp-auth0/mcp-auth0-oidc:
     dependencies:
       '@cloudflare/workers-oauth-provider':
-        specifier: ^0.0.5
-        version: 0.0.5
+        specifier: ^0.0.6
+        version: 0.0.6
       '@modelcontextprotocol/sdk':
         specifier: 1.17.1
         version: 1.17.1
@@ -820,8 +820,8 @@ importers:
   demos/remote-mcp-authkit:
     dependencies:
       '@cloudflare/workers-oauth-provider':
-        specifier: ^0.0.5
-        version: 0.0.5
+        specifier: ^0.0.6
+        version: 0.0.6
       '@modelcontextprotocol/sdk':
         specifier: 1.17.1
         version: 1.17.1
@@ -882,8 +882,8 @@ importers:
   demos/remote-mcp-cf-access:
     dependencies:
       '@cloudflare/workers-oauth-provider':
-        specifier: ^0.0.5
-        version: 0.0.5
+        specifier: ^0.0.6
+        version: 0.0.6
       '@modelcontextprotocol/sdk':
         specifier: 1.17.1
         version: 1.17.1
@@ -919,8 +919,8 @@ importers:
   demos/remote-mcp-github-oauth:
     dependencies:
       '@cloudflare/workers-oauth-provider':
-        specifier: ^0.0.5
-        version: 0.0.5
+        specifier: ^0.0.6
+        version: 0.0.6
       '@modelcontextprotocol/sdk':
         specifier: 1.17.1
         version: 1.17.1
@@ -959,8 +959,8 @@ importers:
   demos/remote-mcp-google-oauth:
     dependencies:
       '@cloudflare/workers-oauth-provider':
-        specifier: ^0.0.5
-        version: 0.0.5
+        specifier: ^0.0.6
+        version: 0.0.6
       '@modelcontextprotocol/sdk':
         specifier: 1.17.1
         version: 1.17.1
@@ -996,8 +996,8 @@ importers:
   demos/remote-mcp-logto:
     dependencies:
       '@cloudflare/workers-oauth-provider':
-        specifier: ^0.0.5
-        version: 0.0.5
+        specifier: ^0.0.6
+        version: 0.0.6
       '@logto/node':
         specifier: ^3.1.6
         version: 3.1.6
@@ -1024,8 +1024,8 @@ importers:
   demos/remote-mcp-server:
     dependencies:
       '@cloudflare/workers-oauth-provider':
-        specifier: ^0.0.5
-        version: 0.0.5
+        specifier: ^0.0.6
+        version: 0.0.6
       '@modelcontextprotocol/sdk':
         specifier: 1.17.1
         version: 1.17.1
@@ -1055,8 +1055,8 @@ importers:
   demos/remote-mcp-server-autorag:
     dependencies:
       '@cloudflare/workers-oauth-provider':
-        specifier: ^0.0.5
-        version: 0.0.5
+        specifier: ^0.0.6
+        version: 0.0.6
       '@modelcontextprotocol/sdk':
         specifier: 1.17.1
         version: 1.17.1
@@ -2092,11 +2092,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@cloudflare/workers-oauth-provider@0.0.5':
-    resolution: {integrity: sha512-t1x5KAzsubCvb4APnJ93z407X1x7SGj/ga5ziRnwIb/iLy4PMkT/hgd1y5z7Bbsdy5Fy6mywhCP4lym24bX66w==}
-
-  '@cloudflare/workers-types@4.20250617.0':
-    resolution: {integrity: sha512-oUJWWKCR9bLgb7ymvM1V3Q//OpMR7jG4etCJs45bRdidmAgCog+y8w8fpuvh27JS4B8KzFNWB0YUD9xBPIf5Qg==}
+  '@cloudflare/workers-oauth-provider@0.0.6':
+    resolution: {integrity: sha512-im/uBqiBtP5YHAs09yBEzHxSZDJkUnB3gQh7awps+dQSN3tC/OMr29nOppRep4/NFSlAsXpDUpNB7unEjts+Xw==}
 
   '@cloudflare/workers-types@4.20250803.0':
     resolution: {integrity: sha512-Zgfb9y971379/b0fDvSkH6l830dVDanO5kxUHbg2TI5kQDWMRtFPsAntRtEwRqOU7aFFDrDd4gp/bcs6+ZokUQ==}
@@ -7352,11 +7349,7 @@ snapshots:
   '@cloudflare/workerd-windows-64@1.20250730.0':
     optional: true
 
-  '@cloudflare/workers-oauth-provider@0.0.5':
-    dependencies:
-      '@cloudflare/workers-types': 4.20250617.0
-
-  '@cloudflare/workers-types@4.20250617.0': {}
+  '@cloudflare/workers-oauth-provider@0.0.6': {}
 
   '@cloudflare/workers-types@4.20250803.0': {}
 

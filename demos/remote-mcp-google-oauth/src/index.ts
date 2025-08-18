@@ -30,7 +30,7 @@ export default new OAuthProvider({
 	// https://developers.cloudflare.com/agents/model-context-protocol/transport/#mcp-server-with-authentication
 	apiHandlers: {
 		"/sse": MyMCP.serveSSE("/sse"), // deprecated SSE protocol - use /mcp instead
-		"/mcp": MyMCP.serve("/mcp"),    // Streamable-HTTP protocol
+		"/mcp": MyMCP.serve("/mcp"), // Streamable-HTTP protocol
 	},
 	authorizeEndpoint: "/authorize",
 	clientRegistrationEndpoint: "/register",
