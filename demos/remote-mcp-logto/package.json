@@ -16,11 +16,11 @@
 		"@logto/node": "^3.1.6",
 		"@modelcontextprotocol/sdk": "1.17.3",
 		"agents": "^0.0.113",
-		"hono": "^4.9.2",
+		"hono": "^4.9.5",
 		"zod": "^3.25.76"
 	},
 	"devDependencies": {
 		"typescript": "5.9.2",
-		"wrangler": "^4.31.0"
+		"wrangler": "^4.33.1"
 	}
 }

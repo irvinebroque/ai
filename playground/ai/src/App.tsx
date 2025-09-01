@@ -95,7 +95,7 @@ const App = () => {
 			model: params.model,
 			stream: params.stream,
 			system_message: systemMessage,
-			tools: mcpTools,
+			tools: mcpToolsRef.current,
 		};
 	}
 

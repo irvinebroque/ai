@@ -40,11 +40,11 @@
 	},
 	"dependencies": {
 		"@ai-sdk/provider": "^2.0.0",
-		"@ai-sdk/provider-utils": "^3.0.4",
-		"ai": "^5.0.20"
+		"@ai-sdk/provider-utils": "^3.0.7",
+		"ai": "^5.0.29"
 	},
 	"devDependencies": {
-		"@biomejs/biome": "^2.2.0",
+		"@biomejs/biome": "^2.2.2",
 		"tsup": "^8.5.0",
 		"typescript": "5.9.2"
 	}

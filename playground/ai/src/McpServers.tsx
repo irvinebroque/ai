@@ -144,9 +144,9 @@ export function McpServers({ onToolsUpdate }: { onToolsUpdate?: (tools: any[]) =
 	}, []);
 
 	// Handle authentication if popup was blocked
-	const handleManualAuth = async () => {
+	const handleManualAuth = () => {
 		try {
-			await authenticate();
+			authenticate();
 		} catch (err) {
 			console.error("Authentication error:", err);
 		}
