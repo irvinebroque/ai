@@ -36,7 +36,11 @@ export function getMappedStream(response: Response) {
 						textId = generateId();
 						controller.enqueue({ type: "text-start", id: textId });
 					}
-					controller.enqueue({ type: "text-delta", id: textId, delta: chunk.response });
+					controller.enqueue({
+						type: "text-delta",
+						id: textId,
+						delta: chunk.response,
+					});
 				}
 
 				// Handle reasoning content
@@ -60,13 +64,17 @@ export function getMappedStream(response: Response) {
 						textId = generateId();
 						controller.enqueue({ type: "text-start", id: textId });
 					}
-					controller.enqueue({ type: "text-delta", id: textId, delta: textDelta });
+					controller.enqueue({
+						type: "text-delta",
+						id: textId,
+						delta: textDelta,
+					});
 				}
 			}
 
 			if (partialToolCalls.length > 0) {
 				const toolCalls = processPartialToolCalls(partialToolCalls);
-				toolCalls.map((toolCall) => {
+				toolCalls.forEach((toolCall) => {
 					controller.enqueue(toolCall);
 				});
 			}

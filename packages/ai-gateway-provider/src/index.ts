@@ -13,7 +13,9 @@ async function streamToObject(stream: ReadableStream) {
 	return await response.json();
 }
 
-type InternalLanguageModelV2 = LanguageModelV2 & { config?: { fetch?: FetchFunction | undefined } };
+type InternalLanguageModelV2 = LanguageModelV2 & {
+	config?: { fetch?: FetchFunction | undefined };
+};
 
 export class AiGatewayChatLanguageModel implements LanguageModelV2 {
 	readonly specificationVersion = "v2";
@@ -139,8 +141,10 @@ export class AiGatewayChatLanguageModel implements LanguageModelV2 {
 		// Error handling
 		if (resp.status === 400) {
 			const cloneResp = resp.clone();
-			const result: { success?: boolean; error?: { code: number; message: string }[] } =
-				await cloneResp.json();
+			const result: {
+				success?: boolean;
+				error?: { code: number; message: string }[];
+			} = await cloneResp.json();
 			if (
 				result.success === false &&
 				result.error &&
@@ -151,8 +155,10 @@ export class AiGatewayChatLanguageModel implements LanguageModelV2 {
 			}
 		} else if (resp.status === 401) {
 			const cloneResp = resp.clone();
-			const result: { success?: boolean; error?: { code: number; message: string }[] } =
-				await cloneResp.json();
+			const result: {
+				success?: boolean;
+				error?: { code: number; message: string }[];
+			} = await cloneResp.json();
 			if (
 				result.success === false &&
 				result.error &&
@@ -165,7 +171,7 @@ export class AiGatewayChatLanguageModel implements LanguageModelV2 {
 			}
 		}
 
-		const step = Number.parseInt(resp.headers.get("cf-aig-step") ?? "0");
+		const step = Number.parseInt(resp.headers.get("cf-aig-step") ?? "0", 10);
 		if (!this.models[step]) {
 			throw new Error("Unexpected AI Gateway Error");
 		}

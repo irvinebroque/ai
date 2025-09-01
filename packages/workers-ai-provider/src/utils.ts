@@ -1,4 +1,5 @@
 import type { LanguageModelV2, LanguageModelV2ToolCall } from "@ai-sdk/provider";
+import { generateId } from "ai";
 
 /**
  * General AI run interface with overloads to handle distinct return types.
@@ -138,7 +139,7 @@ export function prepareToolsAndToolChoice(
 		function: {
 			description: tool.type === "function" && tool.description,
 			name: tool.name,
-			inputSchema: tool.type === "function" && tool.inputSchema,
+			parameters: tool.type === "function" && tool.inputSchema,
 		},
 		type: "function",
 	}));
@@ -220,7 +221,7 @@ function processToolCall(toolCall: any): LanguageModelV2ToolCall {
 				typeof toolCall.function.arguments === "string"
 					? toolCall.function.arguments
 					: JSON.stringify(toolCall.function.arguments || {}),
-			toolCallId: toolCall.id,
+			toolCallId: toolCall.id || generateId(),
 			type: "tool-call",
 			toolName: toolCall.function.name,
 		};
@@ -230,7 +231,7 @@ function processToolCall(toolCall: any): LanguageModelV2ToolCall {
 			typeof toolCall.arguments === "string"
 				? toolCall.arguments
 				: JSON.stringify(toolCall.arguments || {}),
-		toolCallId: toolCall.name,
+		toolCallId: toolCall.id || generateId(),
 		type: "tool-call",
 		toolName: toolCall.name,
 	};

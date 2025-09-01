@@ -109,6 +109,7 @@ describe("processToolCalls", () => {
 				{
 					arguments: '{"param": "value"}',
 					name: "test_function",
+					id: "call_123",
 				},
 			],
 		};
@@ -117,7 +118,7 @@ describe("processToolCalls", () => {
 		expect(result).toEqual([
 			{
 				input: '{"param": "value"}',
-				toolCallId: "test_function",
+				toolCallId: "call_123",
 				toolName: "test_function",
 				type: "tool-call",
 			},

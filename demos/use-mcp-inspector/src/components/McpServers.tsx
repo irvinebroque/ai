@@ -293,7 +293,7 @@ export function McpServers({ onToolsUpdate }: { onToolsUpdate?: (tools: Tool[]) 
 							e.target.value === ""
 								? ""
 								: schema.type === "integer"
-									? Number.parseInt(e.target.value) || 0
+									? Number.parseInt(e.target.value, 10) || 0
 									: Number.parseFloat(e.target.value) || 0;
 						handleFormChange(toolName, fieldName, newValue);
 					}}

@@ -1,4 +1,4 @@
-/** biome-ignore-all lint/nursery/useUniqueElementIds: it's fine */
+/** biome-ignore-all lint/correctness/useUniqueElementIds: it's fine */
 /** biome-ignore-all lint/a11y/noStaticElementInteractions: it's fine */
 interface HeaderProps {
 	onSetCodeVisible: (visible: boolean) => void;

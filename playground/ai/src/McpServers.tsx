@@ -1,9 +1,9 @@
-/** biome-ignore-all lint/nursery/useUniqueElementIds: it's finr */
-import { useEffect, useRef, useState } from "react";
+/** biome-ignore-all lint/correctness/useUniqueElementIds: it's fine */
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { type UseMcpResult, useMcp } from "use-mcp/react";
 
 // MCP Connection wrapper that only renders when active
-function McpConnection({
+const McpConnection = memo(function McpConnection({
 	serverUrl,
 	headerKey,
 	bearerToken,
@@ -17,8 +17,10 @@ function McpConnection({
 	onConnectionUpdate: (data: ConnectionData) => void;
 }) {
 	// Build custom headers object
-	const customHeaders = headerKey && bearerToken ? { [headerKey]: `Bearer ${bearerToken}` } : {};
-
+	const customHeaders = useMemo(
+		() => (headerKey && bearerToken ? { [headerKey]: `Bearer ${bearerToken}` } : {}),
+		[headerKey, bearerToken],
+	);
 	// Use the MCP hook with the server URL
 	const connection = useMcp({
 		autoRetry: false,
@@ -36,7 +38,7 @@ function McpConnection({
 
 	// Return null as this is just a hook wrapper
 	return null;
-}
+});
 
 type ConnectionData = Omit<UseMcpResult, "state"> & {
 	state: "not-connected" | UseMcpResult["state"];
@@ -47,7 +49,7 @@ export function McpServers({ onToolsUpdate }: { onToolsUpdate?: (tools: any[]) =
 		return sessionStorage.getItem("mcpServerUrl") || "";
 	});
 	const [transportType, _setTransportType] = useState<"auto" | "http" | "sse">(() => {
-		return (sessionStorage.getItem("mcpTransportType") as "auto" | "http" | "sse") || "auto";
+		return (sessionStorage.getItem("mcpTransportType") as "auto" | "http" | "sse") || "sse";
 	});
 	const [isActive, setIsActive] = useState(false);
 	const [showSettings, setShowSettings] = useState(true);
@@ -136,10 +138,10 @@ export function McpServers({ onToolsUpdate }: { onToolsUpdate?: (tools: any[]) =
 		});
 	};
 
-	const handleConnectionUpdate = (data: ConnectionData) => {
+	const handleConnectionUpdate = useCallback((data: ConnectionData) => {
 		setConnectionData(data);
 		if (data.state === "failed") setIsActive(false);
-	};
+	}, []);
 
 	// Handle authentication if popup was blocked
 	const handleManualAuth = async () => {

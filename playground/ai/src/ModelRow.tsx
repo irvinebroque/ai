@@ -15,6 +15,8 @@ const ModelRow = ({ model }: { model: Model }) => {
 			if (property_id === "function_calling" && value === "true") {
 				return "MCP";
 			}
+
+			return null;
 		})
 		.filter((val) => !!val);
 

@@ -160,11 +160,15 @@ export function createAutoRAG(options: AutoRAGSettings): AutoRAGProvider {
 	const binding = options.binding;
 
 	const createChatModel = (settings: AutoRAGChatSettings = {}) =>
-		// @ts-ignore Needs fix from @cloudflare/workers-types for custom types
-		new AutoRAGChatLanguageModel("@cf/meta/llama-3.3-70b-instruct-fp8-fast", settings, {
-			binding,
-			provider: "autorag.chat",
-		});
+		new AutoRAGChatLanguageModel(
+			// @ts-expect-error Needs fix from @cloudflare/workers-types for custom types
+			"@cf/meta/llama-3.3-70b-instruct-fp8-fast",
+			settings,
+			{
+				binding,
+				provider: "autorag.chat",
+			},
+		);
 
 	const provider = (settings?: AutoRAGChatSettings) => {
 		if (new.target) {

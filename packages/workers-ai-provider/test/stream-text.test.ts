@@ -212,10 +212,10 @@ describe("REST API - Streaming Text Tests", () => {
 		}
 
 		expect(toolCalls).toHaveLength(1);
+		delete toolCalls[0].toolCallId;
 		expect(toolCalls).toMatchObject([
 			{
 				input: { location: "London" },
-				toolCallId: "get_weather",
 				toolName: "get_weather",
 				type: "tool-call",
 			},
@@ -557,10 +557,10 @@ describe("Binding - Streaming Text Tests", () => {
 		}
 
 		expect(toolCalls).toHaveLength(1);
+		delete toolCalls[0].toolCallId;
 		expect(toolCalls).toMatchObject([
 			{
 				input: { location: "London" },
-				toolCallId: "get_weather",
 				toolName: "get_weather",
 				type: "tool-call",
 			},

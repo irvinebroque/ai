@@ -45,6 +45,8 @@ export function convertToWorkersAIChatMessages(prompt: LanguageModelV2Prompt): {
 									return ""; // No text for the image part
 								}
 							}
+
+							return undefined;
 						})
 						.join("\n"),
 					role: "user",

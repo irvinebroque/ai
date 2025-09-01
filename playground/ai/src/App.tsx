@@ -1,6 +1,7 @@
+/** biome-ignore-all lint/correctness/useUniqueElementIds: it's fine */
 import { useChat } from "@ai-sdk/react";
-import type { Tool } from "@modelcontextprotocol/sdk/types.js";
-import { useRef, useState } from "react";
+import type { Tool, CallToolResult } from "@modelcontextprotocol/sdk/types.js";
+import { useEffect, useRef, useState } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
 import TextareaAutosize from "react-textarea-autosize";
 import FinetuneSelector from "./FinetuneSelector";
@@ -11,7 +12,7 @@ import { McpServers } from "./McpServers";
 import ModelSelector from "./ModelSelector";
 import { models } from "./models";
 import ViewCodeModal from "./ViewCodeModal";
-import { stepCountIs } from "ai";
+import { DefaultChatTransport, lastAssistantMessageIsCompleteWithToolCalls } from "ai";
 
 const finetuneTemplates = {
 	"cf-public-cnn-summarization": `You are given a news article below. Please summarize the article, including only its highlights.
@@ -50,6 +51,10 @@ export type Params = {
 	lora: string | null;
 };
 
+type CallableTool = Tool & {
+	callTool: (args: Record<string, any>) => Promise<CallToolResult>;
+};
+
 const App = () => {
 	const queryParams = new URLSearchParams(document.location.search);
 	const selectedModel = queryParams.get("model");
@@ -72,31 +77,49 @@ const App = () => {
 	const [codeVisible, setCodeVisible] = useState(false);
 	const [settingsVisible, setSettingsVisible] = useState(false);
 	const [systemMessage, setSystemMessage] = useState("You are a helpful assistant");
-	const [mcpTools, setMcpTools] = useState<Tool[]>([]);
+	const [mcpTools, setMcpTools] = useState<CallableTool[]>([]);
+	const mcpToolsRef = useRef<CallableTool[]>([]);
 
-	const { messages, input, handleInputChange, handleSubmit, status, setMessages } = useChat({
-		api: "/api/inference",
-		body: {
+	useEffect(() => {
+		// we do this to make the latest mcpTools
+		// available to the onToolCall callback
+		// which otherwise has a stale closure
+		mcpToolsRef.current = mcpTools;
+	}, [mcpTools]);
+
+	const [input, setInput] = useState("");
+	function getBody() {
+		return {
 			lora: params.lora,
 			max_tokens: params.max_tokens,
 			model: params.model,
 			stream: params.stream,
 			system_message: systemMessage,
 			tools: mcpTools,
-		},
-		stopWhen: stepCountIs(5),
+		};
+	}
 
+	const handleSubmit = (e: any) => {
+		e.preventDefault();
+		sendMessage({ text: input }, { body: getBody() });
+		setInput("");
+	};
+
+	const { messages, status, setMessages, sendMessage, addToolResult } = useChat({
+		sendAutomaticallyWhen: lastAssistantMessageIsCompleteWithToolCalls,
+
+		transport: new DefaultChatTransport({
+			api: "/api/inference",
+			credentials: "include",
+		}),
 		async onToolCall({ toolCall }) {
 			try {
-				// console.log({ onToolCall: toolCall, mcpTools });
-				const mcpTool = mcpTools.find((t) => t.name === toolCall.toolName);
-				// console.log({ mcpTool });
+				const mcpTool = mcpToolsRef.current.find((t) => t.name === toolCall.toolName);
 				if (mcpTool) {
-					const { args } = toolCall as { args: Record<string, any> };
+					const { input } = toolCall as { input: Record<string, any> };
 					// convert any args from string to number if their schema says they should be
 					const convertedArgs = Object.fromEntries(
-						Object.entries(args).map(([key, value]) => {
-							// console.log({ key, value });
+						Object.entries(input).map(([key, value]) => {
 							if (
 								(mcpTool.inputSchema.properties?.[key] as any)?.type === "number" &&
 								typeof value === "string"
@@ -106,41 +129,45 @@ const App = () => {
 							return [key, value];
 						}),
 					);
-					// console.log({ toolCall, mcpTool, args, convertedArgs });
-					const calledTool = await (mcpTool as any).callTool(convertedArgs);
-					// console.log({ calledTool });
+					const calledTool = await mcpTool.callTool(convertedArgs);
 					if (Array.isArray(calledTool?.content)) {
-						return (
-							calledTool.content
-								// @ts-expect-error need to fix this
-								.map((c) => {
-									// console.log({ c });
-									if (c.type === "image") {
-										// Extract the base64 data and mime type
-										const { data, mimeType } = c;
-										const binaryData = atob(data);
+						calledTool.content.forEach((c) => {
+							if (c.type === "image") {
+								// Extract the base64 data and mime type
+								const { data, mimeType } = c;
+								const binaryData = atob(data);
 
-										// Create an array buffer from the binary data
-										const arrayBuffer = new Uint8Array(binaryData.length);
-										for (let i = 0; i < binaryData.length; i++) {
-											arrayBuffer[i] = binaryData.charCodeAt(i);
-										}
+								// Create an array buffer from the binary data
+								const arrayBuffer = new Uint8Array(binaryData.length);
+								for (let i = 0; i < binaryData.length; i++) {
+									arrayBuffer[i] = binaryData.charCodeAt(i);
+								}
 
-										// Create a blob from the array buffer
-										const blob = new Blob([arrayBuffer], { type: mimeType });
+								// Create a blob from the array buffer
+								const blob = new Blob([arrayBuffer], { type: mimeType });
 
-										// Create a URL for the blob
-										const blobUrl = URL.createObjectURL(blob);
+								// Create a URL for the blob
+								const blobUrl = URL.createObjectURL(blob);
 
-										// Return a description of the received data
-										return `Received image: ${mimeType}, size: ${Math.round(data.length / 1024)}KB\n[${blobUrl}]`;
-									}
-									return c.text;
-								})
-								.join("\n")
-						);
+								// Return a description of the received data
+								addToolResult({
+									tool: toolCall.toolName,
+									toolCallId: toolCall.toolCallId,
+									output: `Received image: ${mimeType}, size: ${Math.round(data.length / 1024)}KB\n[${blobUrl}]`,
+								});
+							}
+							addToolResult({
+								tool: toolCall.toolName,
+								toolCallId: toolCall.toolCallId,
+								output: c.text,
+							});
+						});
 					}
-					return `Sorry, something went wrong. Got this response: ${JSON.stringify(calledTool)}`;
+					addToolResult({
+						tool: toolCall.toolName,
+						toolCallId: toolCall.toolCallId,
+						output: `Sorry, something went wrong. Got this response: ${JSON.stringify(calledTool)}`,
+					});
 				}
 			} catch (e) {
 				console.log(e);
@@ -154,7 +181,7 @@ const App = () => {
 
 	const messageElement = useRef<HTMLDivElement>(null);
 
-	useHotkeys("meta+enter, ctrl+enter", () => handleSubmit(), {
+	useHotkeys("meta+enter, ctrl+enter", (e) => handleSubmit(e), {
 		enableOnFormTags: ["textarea"],
 	});
 
@@ -305,10 +332,15 @@ const App = () => {
 											});
 											setMessages([
 												{
-													content:
-														finetuneTemplates[
-															model?.name as keyof typeof finetuneTemplates
-														] || "",
+													parts: [
+														{
+															type: "text",
+															text:
+																finetuneTemplates[
+																	model?.name as keyof typeof finetuneTemplates
+																] || "",
+														},
+													],
 													id: "0",
 													role: "user",
 												},
@@ -398,46 +430,45 @@ const App = () => {
 										<li className="mb-3 flex flex-col items-start border-b border-b-gray-100 w-full pb-3">
 											{message.parts.map((part, i) =>
 												part.type === "file" ? (
-													part.mimeType.startsWith("image/") ? (
+													part.mediaType.startsWith("image/") ? (
 														<img
 															// biome-ignore lint/suspicious/noArrayIndexKey: it's fine
 															key={i}
 															className="max-w-md mx-auto"
-															src={`data:${part.mimeType};base64,${part.data}`}
+															src={part.url}
 															// biome-ignore lint/a11y/noRedundantAlt: it's fine
 															alt="Image from tool call response"
 														/>
 													) : null
-												) : part.type === "tool-invocation" ? (
-													// biome-ignore lint/suspicious/noArrayIndexKey: <expla	nation>
+												) : part.type.startsWith("tool-") &&
+													/* let's assert this to tell typescript it's a tool call*/ "input" in
+														part ? (
+													// biome-ignore lint/suspicious/noArrayIndexKey: <expla nation>
 													<div key={i}>
 														<div className="w-full text-center italic text-xs text-gray-400 font-mono max-h-20 overflow-auto break-all px-2 whitespace-pre-line">
-															[tool] {part.toolInvocation.toolName}(
-															{JSON.stringify(
-																part.toolInvocation.args,
-															)}
-															) =&gt;&nbsp;
-															{part.toolInvocation.state === "call" &&
+															[tool] {part.type}(
+															{JSON.stringify(part.input)})
+															=&gt;&nbsp;
+															{part.state === "input-available" &&
 															status === "ready"
 																? "awaiting confirmation..."
-																: part.toolInvocation.state ===
-																		"call"
+																: part.state === "input-available"
 																	? "pending..."
-																	: part.toolInvocation.state ===
-																			"result"
-																		? part.toolInvocation.result
+																	: part.state ===
+																			"output-available"
+																		? (part.output as string)
 																		: null}
 														</div>
-														{part.toolInvocation.state === "result" &&
-														part.toolInvocation.result.match(
+														{part.state === "output-available" &&
+														(part.output as string).match(
 															/\[blob:.*]/,
 														) ? (
 															<img
 																className="block max-w-md mx-auto mt-3"
 																src={
-																	part.toolInvocation.result.match(
+																	(part.output as string).match(
 																		/\[(blob:.*)]/,
-																	)[1]
+																	)![1]
 																}
 																// biome-ignore lint/a11y/noRedundantAlt: it's fine
 																alt="Image from tool call response"
@@ -448,7 +479,7 @@ const App = () => {
 											)}
 										</li>
 									)}
-									{message.content ? (
+									{message.parts.some((p) => p.type === "text") ? (
 										<li className="mb-3 flex items-start border-b border-b-gray-100 w-full py-2">
 											<div className="mr-3 w-[80px]">
 												<button
@@ -467,9 +498,12 @@ const App = () => {
 														(streaming || loading) &&
 														"pointer-events-none"
 													}`}
-													value={message.content}
+													value={message.parts
+														.filter((p) => p.type === "text")
+														.map((p) => p.text)
+														.join("")}
 													disabled={true}
-													onChange={handleInputChange}
+													onChange={(e) => setInput(e.target.value)}
 												/>
 											</div>
 										</li>
@@ -492,7 +526,7 @@ const App = () => {
 											className="rounded-md p-3 w-full resize-none mt-[-6px] hover:bg-gray-50 pointer-events-none"
 											value="..."
 											disabled={true}
-											onChange={handleInputChange}
+											onChange={(e) => setInput(e.target.value)}
 										/>
 									</div>
 								</li>
@@ -517,7 +551,7 @@ const App = () => {
 											placeholder="Enter a message..."
 											value={input}
 											disabled={loading || streaming}
-											onChange={handleInputChange}
+											onChange={(e) => setInput(e.target.value)}
 										/>
 									</div>
 								</li>
