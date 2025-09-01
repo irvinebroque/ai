@@ -205,6 +205,10 @@ export class WorkersAIChatLanguageModel implements LanguageModelV2 {
 				throw new Error("This shouldn't happen");
 			}
 
+			// Track start/delta/end IDs per v5 streaming protocol
+			let textId: string | null = null;
+			let reasoningId: string | null = null;
+
 			return {
 				// rawCall: { rawPrompt: messages, rawSettings: args },
 				stream: new ReadableStream<LanguageModelV2StreamPart>({
@@ -217,22 +221,41 @@ export class WorkersAIChatLanguageModel implements LanguageModelV2 {
 
 						for (const contentPart of response.content) {
 							if (contentPart.type === "text") {
+								if (!textId) {
+									textId = generateId();
+									controller.enqueue({ type: "text-start", id: textId });
+								}
 								controller.enqueue({
 									delta: contentPart.text,
 									type: "text-delta",
-									id: generateId(),
+									id: textId,
 								});
 							}
 							if (contentPart.type === "tool-call") {
 								controller.enqueue(contentPart);
 							}
 							if (contentPart.type === "reasoning") {
+								if (!reasoningId) {
+									reasoningId = generateId();
+									controller.enqueue({
+										type: "reasoning-start",
+										id: reasoningId,
+									});
+								}
 								controller.enqueue({
 									type: "reasoning-delta",
 									delta: contentPart.text,
 									id: generateId(),
 								});
 							}
+						}
+						if (reasoningId) {
+							controller.enqueue({ type: "reasoning-end", id: reasoningId });
+							reasoningId = null;
+						}
+						if (textId) {
+							controller.enqueue({ type: "text-end", id: textId });
+							textId = null;
 						}
 						controller.enqueue({
 							finishReason: mapWorkersAIFinishReason(response),

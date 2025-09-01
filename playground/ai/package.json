@@ -3,7 +3,7 @@
 	"private": true,
 	"type": "module",
 	"scripts": {
-		"start": "vite dev",
+		"start": "rm -rf node_modules/.vite && vite dev",
 		"clean": "rm -rf .wrangler node_modules/.vite dist",
 		"deploy": "npm run clean && vite build && wrangler deploy",
 		"type-check": "tsc --noEmit"

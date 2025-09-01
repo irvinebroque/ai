@@ -162,12 +162,13 @@ const App = () => {
 								output: c.text,
 							});
 						});
+					} else {
+						addToolResult({
+							tool: toolCall.toolName,
+							toolCallId: toolCall.toolCallId,
+							output: `Sorry, something went wrong. Got this response: ${JSON.stringify(calledTool)}`,
+						});
 					}
-					addToolResult({
-						tool: toolCall.toolName,
-						toolCallId: toolCall.toolCallId,
-						output: `Sorry, something went wrong. Got this response: ${JSON.stringify(calledTool)}`,
-					});
 				}
 			} catch (e) {
 				console.log(e);
