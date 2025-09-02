@@ -65,7 +65,7 @@ async function main() {
 		}
 	}
 
-	fs.writeFileSync("../src/models.json", JSON.stringify(models));
+	fs.writeFileSync("../src/models.json", `${JSON.stringify(models, null, 2)}\n`);
 }
 
 main().catch((e) => {

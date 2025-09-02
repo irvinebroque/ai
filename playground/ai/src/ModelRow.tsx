@@ -22,7 +22,7 @@ const ModelRow = ({ model }: { model: Model }) => {
 
 	// TODO: Update label for LoRA
 	return (
-		<div className="w-full whitespace-nowrap items-center flex">
+		<div className="w-full whitespace-nowrap items-center flex" title={model.description}>
 			{name}
 			<div className="ml-2">
 				{tags.map((tag) => (
