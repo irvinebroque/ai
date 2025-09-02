@@ -1202,6 +1202,9 @@ importers:
       ai:
         specifier: ^5.0.29
         version: 5.0.29(zod@3.25.76)
+      workers-ai-provider:
+        specifier: workspace:*
+        version: link:../../packages/workers-ai-provider
       zod:
         specifier: ^3.25.76
         version: 3.25.76
