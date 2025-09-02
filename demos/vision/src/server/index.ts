@@ -64,7 +64,7 @@ app.post("/analyze", async (c) => {
 		});
 	} catch (error) {
 		console.error("Error processing image:", error);
-		return c.json({ error: "Failed to process image" }, 500);
+		return c.json({ error: (error as Error).message || "Failed to process image" }, 500);
 	}
 });
 

@@ -1,11 +1,18 @@
 import { useChat } from "@ai-sdk/react";
 import { Center, Paper, Text, TextInput, Button, Group, ScrollArea, Stack } from "@mantine/core";
+import { DefaultChatTransport } from "ai";
+import { useState } from "react";
 
 const ChatUI: React.FC = () => {
-	const { messages, input, handleSubmit, handleInputChange } = useChat({
-		keepLastMessageOnError: true,
-		api: "/api",
+	const [input, setInput] = useState("");
+	const { messages, sendMessage } = useChat({
+		transport: new DefaultChatTransport({ api: "/api" }),
 	});
+	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
+		sendMessage({ text: input });
+		setInput("");
+	};
 
 	return (
 		<Center style={{ height: "100vh", backgroundColor: "#f5f5f5" }}>
@@ -15,7 +22,12 @@ const ChatUI: React.FC = () => {
 						{messages.map((message) => (
 							<Paper key={message.id} p="xs" shadow="xs">
 								<Text>{message.role === "user" ? "User" : "Assistant"}:</Text>
-								<Text>{message.content}</Text>
+								<Text>
+									{message.parts
+										.filter((part) => part.type === "text")
+										.map((part) => part.text)
+										.join("")}
+								</Text>
 							</Paper>
 						))}
 					</Stack>
@@ -25,7 +37,9 @@ const ChatUI: React.FC = () => {
 						<TextInput
 							name="chat-input"
 							value={input}
-							onChange={handleInputChange}
+							onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+								setInput(e.target.value)
+							}
 							placeholder="Type your message..."
 							style={{ flexGrow: 1 }}
 						/>

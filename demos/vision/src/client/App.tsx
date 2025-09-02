@@ -22,7 +22,7 @@ function App() {
 				body: formData,
 			});
 
-			const data = await response.json();
+			const data = await response.json<{ analysis: string; error: string }>();
 
 			if (!response.ok) {
 				throw new Error(data.error || "Failed to analyze image");
@@ -73,7 +73,7 @@ function App() {
 				reader.readAsDataURL(file);
 			}
 		},
-		[],
+		[]
 	);
 
 	return (
