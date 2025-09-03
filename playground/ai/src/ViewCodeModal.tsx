@@ -9,7 +9,13 @@ const createMessageString = (
   stream: true,
   max_tokens: ${params.max_tokens},${params.lora ? `\n  lora: "${params.lora}",` : ""}
   messages: [\n${messages
-		.map((message) => `    { role: "${message.role}", content: "${message.content}"}`)
+		.map(
+			(message) =>
+				`    { role: "${message.role}", content: "${message.parts
+					.filter((part) => part.type === "text")
+					.map((part) => part.text)
+					.join("")}"}`,
+		)
 		.join(",\n")}
   ],
 });

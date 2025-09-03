@@ -1,5 +1,11 @@
 import type { Tool } from "@modelcontextprotocol/sdk/types.js";
-import { jsonSchema, streamText, type UIMessage } from "ai";
+import {
+	convertToModelMessages,
+	jsonSchema,
+	type JSONSchema7,
+	streamText,
+	type UIMessage,
+} from "ai";
 import { createWorkersAI } from "workers-ai-provider";
 import { models } from "../models";
 
@@ -39,36 +45,33 @@ async function replyToMessage(request: Request, env: Env, _ctx: ExecutionContext
 	const workersai = createWorkersAI({
 		binding: env.AI,
 	});
+
 	const mcpTools = Object.fromEntries(
 		tools.map((t) => {
 			return [
 				t.name,
 				{
-					description: t.description,
-					// @ts-expect-error it's fine
-					parameters: jsonSchema(t.inputSchema),
+					description: t.description || t.name,
+					inputSchema: jsonSchema(t.inputSchema as JSONSchema7),
 				},
 			];
 		}),
 	);
-	// console.log(tools);
-	// console.log(mcpTools);
 
 	const result = streamText({
-		maxTokens: max_tokens,
-		messages,
+		maxOutputTokens: max_tokens,
+		messages: convertToModelMessages(messages),
 		model: workersai(model as Parameters<typeof workersai>[0]),
 		onError: (err) => {
-			console.log({ err });
+			console.error("error in replyToMessage/streamText", err);
 		},
 		system: system_message,
-		toolCallStreaming: false,
 		tools: mcpTools,
 	});
 
-	return result.toDataStreamResponse({
-		getErrorMessage: (error: unknown) => {
-			console.log(error);
+	return result.toUIMessageStreamResponse({
+		onError: (error: unknown) => {
+			console.error("error in replyToMessage/toUIMessageStreamResponse", error);
 			return "Error during inference";
 		},
 		headers: {

@@ -228,6 +228,11 @@ const ModelSelector = ({
 					{isOpen ? <>&#8593;</> : <>&#8595;</>}
 				</span>
 			</div>
+			{selectedItem && !isOpen && (
+				<div className="p-2 bg-gray-50 border border-gray-200 rounded-md mt-2">
+					<p className="text-sm text-gray-600">{selectedItem.description}</p>
+				</div>
+			)}
 			<ul
 				className={`absolute left-0 right-0 bg-white mt-1 border border-gray-200 px-2 py-2 rounded-md shadow-lg max-h-80 overflow-scroll z-10 ${
 					!isOpen && "hidden"

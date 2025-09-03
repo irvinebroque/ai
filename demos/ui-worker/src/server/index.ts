@@ -2,7 +2,7 @@ import { createOpenAI } from "@ai-sdk/openai";
 import { generateObject } from "ai";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
-import z from "zod";
+import { z } from "zod/v3";
 import type { Variables } from "./types/hono";
 
 const app = new Hono<{ Bindings: Env; Variables: Variables }>();
@@ -29,6 +29,8 @@ app.post("/api", async (c) => {
 	const bigModel = openai("gpt-4o");
 	const smallModel = openai("gpt-4o-mini");
 
+	console.log("generating draft...", prompt);
+
 	// --- Step 1: Generate the Initial Draft ---
 	const draftPrompt = `Please generate an initial draft for the following task:\n\n${prompt}\n\n
 		Return your response as a JSON object in the format { "draft": "Your initial draft here." }`;
@@ -37,6 +39,8 @@ app.post("/api", async (c) => {
 		schema: draftSchema,
 		prompt: draftPrompt,
 	});
+
+	console.log("evaluating draft...");
 
 	// --- Step 2: Evaluate the Draft ---
 	const evaluationPrompt = `Please evaluate the following draft and provide constructive feedback on how to improve it:\n\n
@@ -47,6 +51,8 @@ app.post("/api", async (c) => {
 		schema: evaluationSchema,
 		prompt: evaluationPrompt,
 	});
+
+	console.log("optimizing draft...");
 
 	// --- Step 3: Optimize the Draft (if necessary) ---
 	let optimizedResult = { optimizedDraft: draftObj.draft };
@@ -62,6 +68,8 @@ app.post("/api", async (c) => {
 		});
 		optimizedResult = object;
 	}
+
+	console.log("done");
 
 	return c.json({
 		initialDraft: draftObj.draft,

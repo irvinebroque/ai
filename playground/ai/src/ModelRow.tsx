@@ -15,12 +15,14 @@ const ModelRow = ({ model }: { model: Model }) => {
 			if (property_id === "function_calling" && value === "true") {
 				return "MCP";
 			}
+
+			return null;
 		})
 		.filter((val) => !!val);
 
 	// TODO: Update label for LoRA
 	return (
-		<div className="w-full whitespace-nowrap items-center flex">
+		<div className="w-full whitespace-nowrap items-center flex" title={model.description}>
 			{name}
 			<div className="ml-2">
 				{tags.map((tag) => (
