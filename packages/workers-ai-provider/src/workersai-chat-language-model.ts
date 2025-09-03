@@ -167,9 +167,15 @@ export class WorkersAIChatLanguageModel implements LanguageModelV2 {
 
 		return {
 			finishReason: mapWorkersAIFinishReason(output),
-			// TODO DHRAVYA: rawCall and rawResponse- not sure
+			// TODO: rawCall and rawResponse- not sure
 			// rawCall: { rawPrompt: messages, rawSettings: args },
 			// rawResponse: { body: output },
+			// maybe this?
+			// providerMetadata: {
+			// 	prompt: messages,
+			// 	settings: args,
+			// 	response: output,
+			// },
 			content: [
 				...(reasoningContent
 					? [{ type: "reasoning" as const, text: reasoningContent }]
@@ -180,6 +186,7 @@ export class WorkersAIChatLanguageModel implements LanguageModelV2 {
 				},
 				...processToolCalls(output),
 			],
+
 			// @ts-expect-error: Missing types
 			reasoningText: reasoningContent,
 			usage: mapWorkersAIUsage(output),
@@ -329,7 +336,7 @@ export class WorkersAIChatLanguageModel implements LanguageModelV2 {
 
 		return {
 			stream,
-			// TODO DHRAVYA: not sure about rawCalls
+			// TODO: not sure about rawCalls
 			// rawCall: { rawPrompt: messages, rawSettings: args },
 		};
 	}
