@@ -1,5 +1,17 @@
 # workers-ai-provider
 
+## 2.0.0
+
+### Major Changes
+
+- [#256](https://github.com/cloudflare/ai/pull/256) [`a538901`](https://github.com/cloudflare/ai/commit/a5389013b9a512707fb1de1501a1547fce20c014) Thanks [@jahands](https://github.com/jahands)! - feat: Migrate to AI SDK v5
+
+  This updates workers-ai-provider and ai-gateway-provider to use the AI SDK v5. Please refer to the official migration guide to migrate your code https://ai-sdk.dev/docs/migration-guides/migration-guide-5-0
+
+### Patch Changes
+
+- [#216](https://github.com/cloudflare/ai/pull/216) [`26e5fdb`](https://github.com/cloudflare/ai/commit/26e5fdb7186afa911fc98faaf62c1e413db619dd) Thanks [@wussh](https://github.com/wussh)! - Improve documentation by adding generateText example to workers-ai-provider and clarifying supported methods in ai-gateway-provider.
+
 ## 0.7.5
 
 ### Patch Changes
