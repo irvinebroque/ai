@@ -1,6 +1,6 @@
 ---
-workers-ai-provider: minor
-ai-gateway-provider: minor
+workers-ai-provider: major
+ai-gateway-provider: major
 ---
 
 feat: Migrate to AI SDK v5
