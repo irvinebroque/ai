@@ -31,7 +31,7 @@ export class MyMCP extends McpAgent<Env, State, Props> {
 			content: [
 				{
 					type: "text",
-					text: String(`User's token: ${this.props.bearerToken}`),
+					text: String(`User's token: ${this.props!.bearerToken}`),
 				},
 			],
 		}));

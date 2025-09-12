@@ -42,7 +42,7 @@ export class MyMCP extends McpAgent<Env, Record<string, never>, Props> {
 			"Get user info from GitHub, via Octokit",
 			{},
 			async () => {
-				const octokit = new Octokit({ auth: this.props.accessToken });
+				const octokit = new Octokit({ auth: this.props!.accessToken });
 				return {
 					content: [
 						{
@@ -56,7 +56,7 @@ export class MyMCP extends McpAgent<Env, Record<string, never>, Props> {
 
 		// Dynamically add tools based on the user's login. In this case, I want to limit
 		// access to my Image Generation tool to just me
-		if (ALLOWED_USERNAMES.has(this.props.login)) {
+		if (ALLOWED_USERNAMES.has(this.props!.login)) {
 			this.server.tool(
 				"generateImage",
 				"Generate an image using the `flux-1-schnell` model. Works best with 8 steps.",

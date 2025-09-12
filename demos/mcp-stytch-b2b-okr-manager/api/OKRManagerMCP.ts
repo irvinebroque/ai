@@ -13,13 +13,13 @@ export class OKRManagerMCP extends McpAgent<Env, unknown, AuthenticationContext>
 	async init() {}
 
 	get okrService() {
-		console.log("Binding service to tenant", this.props.organizationID);
-		return okrService(this.env, this.props.organizationID);
+		console.log("Binding service to tenant", this.props!.organizationID);
+		return okrService(this.env, this.props!.organizationID);
 	}
 
 	withRequiredPermissions = <T extends CallableFunction>(rbacParams: RBACParams, fn: T): T => {
 		const withRequiredPermissionsImpl = async (...args: unknown[]) => {
-			await stytchRBACEnforcement(this.env, this.props, rbacParams);
+			await stytchRBACEnforcement(this.env, this.props!, rbacParams);
 			return fn(...args);
 		};
 		return withRequiredPermissionsImpl as unknown as T;
@@ -34,7 +34,11 @@ export class OKRManagerMCP extends McpAgent<Env, unknown, AuthenticationContext>
 		return {
 			content: [
 				{
-					text: `Success! ${description}\n\nNew state:\n${JSON.stringify(newState, null, 2)}\n\nFor Organization:\n${this.props.organizationID}`,
+					text: `Success! ${description}\n\nNew state:\n${JSON.stringify(
+						newState,
+						null,
+						2,
+					)}\n\nFor Organization:\n${this.props!.organizationID}`,
 					type: "text",
 				},
 			],

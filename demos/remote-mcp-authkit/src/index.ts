@@ -24,7 +24,7 @@ export class MyMCP extends McpAgent<Env, unknown, Props> {
 
 		// Dynamically add tools based on the user's permissions. They must have the
 		// `image_generation` permission to use this tool.
-		if (this.props.permissions.includes("image_generation")) {
+		if (this.props!.permissions.includes("image_generation")) {
 			this.server.tool(
 				"generateImage",
 				"Generate an image using the `flux-1-schnell` model. Works best with 8 steps.",

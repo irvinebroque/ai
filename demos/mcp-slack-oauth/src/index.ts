@@ -23,10 +23,10 @@ export class SlackMCP extends McpAgent<Env, unknown, Props> {
 			content: [
 				{
 					text: JSON.stringify({
-						scope: this.props.scope,
-						teamName: this.props.teamName,
-						userId: this.props.userId,
-						userName: this.props.userName,
+						scope: this.props!.scope,
+						teamName: this.props!.teamName,
+						userId: this.props!.userId,
+						userName: this.props!.userName,
 					}),
 					type: "text",
 				},
@@ -39,7 +39,7 @@ export class SlackMCP extends McpAgent<Env, unknown, Props> {
 			"Get a list of channels from your Slack workspace",
 			{},
 			async () => {
-				const slack = new WebClient(this.props.accessToken);
+				const slack = new WebClient(this.props!.accessToken);
 				const response = await slack.conversations.list({
 					exclude_archived: true,
 					types: "public_channel",
@@ -70,7 +70,7 @@ export class SlackMCP extends McpAgent<Env, unknown, Props> {
 					.describe("Number of messages to retrieve"),
 			},
 			async ({ channelId, limit }) => {
-				const slack = new WebClient(this.props.accessToken);
+				const slack = new WebClient(this.props!.accessToken);
 				const response = await slack.conversations.history({
 					channel: channelId,
 					limit,
@@ -96,7 +96,7 @@ export class SlackMCP extends McpAgent<Env, unknown, Props> {
 				message: z.string().describe("The message to post"),
 			},
 			async ({ channelId, message }) => {
-				const slack = new WebClient(this.props.accessToken);
+				const slack = new WebClient(this.props!.accessToken);
 
 				try {
 					const response = await slack.chat.postMessage({

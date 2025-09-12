@@ -12,14 +12,14 @@
 	"author": "",
 	"dependencies": {
 		"@modelcontextprotocol/sdk": "1.17.5",
-		"agents": "^0.1.0",
+		"agents": "^0.1.2",
 		"nanoid": "^5.1.5",
 		"react": "^19.1.1",
 		"react-dom": "^19.1.1"
 	},
 	"devDependencies": {
 		"@cloudflare/vite-plugin": "^1.12.4",
-		"@cloudflare/workers-types": "^4.20250910.0",
+		"@cloudflare/workers-types": "^4.20250912.0",
 		"@types/react": "^19.1.12",
 		"@types/react-dom": "^19.1.9",
 		"@vitejs/plugin-react": "^5.0.2",
