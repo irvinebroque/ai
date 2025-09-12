@@ -13,8 +13,8 @@
 	},
 	"dependencies": {
 		"@cloudflare/workers-oauth-provider": "^0.0.7",
-		"@modelcontextprotocol/sdk": "1.17.5",
-		"agents": "^0.1.2",
+		"@modelcontextprotocol/sdk": "1.18.0",
+		"agents": "^0.1.3",
 		"hono": "^4.9.7",
 		"workers-mcp": "^0.0.13",
 		"zod": "^3.25.76"
@@ -22,6 +22,6 @@
 	"devDependencies": {
 		"marked": "^16.2.1",
 		"typescript": "5.9.2",
-		"wrangler": "^4.35.0"
+		"wrangler": "^4.36.0"
 	}
 }
