@@ -1,12 +1,12 @@
 {
 	"dependencies": {
-		"ai": "^5.0.39",
+		"ai": "^5.0.41",
 		"workers-ai-provider": "^2.0.0",
 		"zod": "^3.25.76"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^2.2.4",
-		"@cloudflare/workers-types": "^4.20250910.0",
+		"@cloudflare/workers-types": "^4.20250912.0",
 		"typescript": "5.9.2",
 		"vitest": "~3.2.4"
 	},

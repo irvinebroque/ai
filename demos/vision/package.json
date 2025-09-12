@@ -14,8 +14,8 @@
 		"type-check": "tsc --noEmit"
 	},
 	"dependencies": {
-		"ai": "^5.0.39",
-		"hono": "^4.9.6",
+		"ai": "^5.0.41",
+		"hono": "^4.9.7",
 		"react": "^19.1.1",
 		"react-dom": "^19.1.1",
 		"workers-ai-provider": "^2.0.0",

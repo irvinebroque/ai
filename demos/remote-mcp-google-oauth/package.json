@@ -10,16 +10,16 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "@cloudflare/workers-oauth-provider": "^0.0.6",
+    "@cloudflare/workers-oauth-provider": "^0.0.7",
     "@modelcontextprotocol/sdk": "1.17.5",
-    "agents": "^0.1.0",
-    "hono": "^4.9.6",
+    "agents": "^0.1.2",
+    "hono": "^4.9.7",
     "just-pick": "^4.2.0",
     "workers-mcp": "^0.0.13",
     "zod": "^3.25.76"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20250910.0",
+    "@cloudflare/workers-types": "^4.20250912.0",
     "prettier": "^3.6.2",
     "typescript": "5.9.2",
     "wrangler": "^4.35.0"

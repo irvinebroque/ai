@@ -12,7 +12,7 @@ export class TodoMCP extends McpAgent<Env, unknown, AuthenticationContext> {
 	async init() {}
 
 	get todoService() {
-		return todoService(this.env as Env, this.props.claims.sub);
+		return todoService(this.env as Env, this.props!.claims.sub);
 	}
 
 	formatResponse = (

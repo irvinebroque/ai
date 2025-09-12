@@ -32,7 +32,12 @@ export class MyMCP extends McpAgent<Bindings, State, Props> {
 		}));
 
 		this.server.tool("getToken", {}, async () => ({
-			content: [{ type: "text", text: String(`User's token: ${this.props.bearerToken}`) }],
+			content: [
+				{
+					type: "text",
+					text: String(`User's token: ${this.props!.bearerToken}`),
+				},
+			],
 		}));
 	}
 }

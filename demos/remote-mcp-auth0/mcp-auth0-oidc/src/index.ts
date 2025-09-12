@@ -14,7 +14,7 @@ export class AuthenticatedMCP extends McpAgent<Env, Record<string, never>, UserP
 	async init() {
 		// Useful for debugging. This will show the current user's claims and the Auth0 tokens.
 		this.server.tool("whoami", "Get the current user's details", {}, async () => ({
-			content: [{ text: JSON.stringify(this.props.claims, null, 2), type: "text" }],
+			content: [{ text: JSON.stringify(this.props!.claims, null, 2), type: "text" }],
 		}));
 
 		// Call the Todos API on behalf of the current user.
@@ -23,7 +23,7 @@ export class AuthenticatedMCP extends McpAgent<Env, Record<string, never>, UserP
 				const response = await fetch(`${this.env.API_BASE_URL}/api/todos`, {
 					headers: {
 						// The Auth0 Access Token is available in props.tokenSet and can be used to call the Upstream API (Todos API).
-						Authorization: `Bearer ${this.props.tokenSet.accessToken}`,
+						Authorization: `Bearer ${this.props!.tokenSet.accessToken}`,
 					},
 				});
 
@@ -53,7 +53,7 @@ export class AuthenticatedMCP extends McpAgent<Env, Record<string, never>, UserP
 			async () => {
 				const response = await fetch(`${this.env.API_BASE_URL}/api/billing`, {
 					headers: {
-						Authorization: `Bearer ${this.props.tokenSet.accessToken}`,
+						Authorization: `Bearer ${this.props!.tokenSet.accessToken}`,
 					},
 				});
 
