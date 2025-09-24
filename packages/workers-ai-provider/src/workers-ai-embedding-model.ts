@@ -38,7 +38,7 @@ export class WorkersAIEmbeddingModel implements EmbeddingModelV2<string> {
 
 	get maxEmbeddingsPerCall(): number {
 		// https://developers.cloudflare.com/workers-ai/platform/limits/#text-embeddings
-		const maxEmbeddingsPerCall = this.modelId === "@cf/baai/bge-large-en-v1.5" ? 1500 : 3000;
+		const maxEmbeddingsPerCall = 3000;
 		return this.settings.maxEmbeddingsPerCall ?? maxEmbeddingsPerCall;
 	}
 
@@ -74,7 +74,6 @@ export class WorkersAIEmbeddingModel implements EmbeddingModelV2<string> {
 
 		const response = await this.config.binding.run(
 			this.modelId,
-			// @ts-expect-error: Error introduced with "@cloudflare/workers-types": "^4.20250617.0"
 			{
 				text: values,
 			},
@@ -82,7 +81,6 @@ export class WorkersAIEmbeddingModel implements EmbeddingModelV2<string> {
 		);
 
 		return {
-			// @ts-expect-error: Error introduced with "@cloudflare/workers-types": "^4.20250617.0"
 			embeddings: response.data,
 		};
 	}
