@@ -112,7 +112,7 @@ const TemplateConfig = z.object({
 	package_json_hash: z.string(),
 });
 
-type Config = z.infer<typeof Config>;
+type Config = zod.z.infer<typeof Config>;
 const Config = z.object({
 	demos: z.record(z.string(), TemplateConfig),
 });
