@@ -1,6 +1,7 @@
 import { McpAgent } from "agents/mcp";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { z } from "zod";
+import * as zod from "zod";
+const { z } = zod;
 
 // Define our MCP agent with tools
 export class MyMCP extends McpAgent {

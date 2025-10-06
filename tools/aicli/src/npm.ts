@@ -1,6 +1,7 @@
 import "zx/globals";
 import { createHash } from "node:crypto";
-import { z } from "zod";
+import * as zod from "zod";
+const { z } = zod;
 
 const repoRoot = path.resolve(__dirname, "../../..");
 

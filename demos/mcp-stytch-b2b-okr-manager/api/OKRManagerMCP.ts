@@ -1,6 +1,7 @@
 import { McpServer, ResourceTemplate } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { McpAgent } from "agents/mcp";
-import { z } from "zod";
+import * as zod from "zod";
+const { z } = zod;
 import type { AuthenticationContext, Objective } from "../types";
 import { type RBACParams, stytchRBACEnforcement } from "./lib/auth.ts";
 import { okrService } from "./OKRService.ts";

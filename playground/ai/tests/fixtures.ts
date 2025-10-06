@@ -5,7 +5,8 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
 import { isInitializeRequest } from "@modelcontextprotocol/sdk/types.js";
 import { test as baseTest } from "@playwright/test";
-import { z } from "zod";
+import * as zod from "zod";
+const { z } = zod;
 
 function createAddTool(server: McpServer) {
 	server.registerTool(

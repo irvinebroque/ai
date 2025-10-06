@@ -1,4 +1,5 @@
-import { z } from "zod";
+import * as zod from "zod";
+const { z } = zod;
 
 /**
  * Information about a validated access token, provided to request handlers.

@@ -1,7 +1,8 @@
 import app from "./app";
 import { McpAgent } from "agents/mcp";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { z } from "zod";
+import * as zod from "zod";
+const { z } = zod;
 import OAuthProvider from "@cloudflare/workers-oauth-provider";
 
 export class MyMCP extends McpAgent {

@@ -2,7 +2,8 @@ import OAuthProvider from "@cloudflare/workers-oauth-provider";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { WebClient } from "@slack/web-api";
 import { McpAgent } from "agents/mcp";
-import { z } from "zod";
+import * as zod from "zod";
+const { z } = zod;
 import { type Props, refreshSlackToken, SlackHandler } from "./slack-handler";
 
 // To restrict access to specific users only, add their Slack userIDs to this Set.

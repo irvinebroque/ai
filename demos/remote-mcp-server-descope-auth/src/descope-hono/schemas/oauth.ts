@@ -1,4 +1,5 @@
-import { z } from "zod";
+import * as zod from "zod";
+const { z } = zod;
 
 /**
  * RFC 8414 OAuth 2.0 Authorization Server Metadata

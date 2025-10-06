@@ -1,4 +1,5 @@
-import { z } from "zod";
+import * as zod from "zod";
+const { z } = zod;
 
 /**
  * Descope error response schema

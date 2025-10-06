@@ -1,6 +1,7 @@
 import { McpAgent } from "agents/mcp";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { z } from "zod";
+import * as zod from "zod";
+const { z } = zod;
 import { type Context, Hono } from "hono";
 import { layout, homeContent } from "./utils";
 import { DescopeMcpProvider } from "./descope-hono/provider";
