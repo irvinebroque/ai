@@ -18,4 +18,4 @@ export const AuthInfoSchema = z.object({
 	expiresAt: z.number().optional(),
 });
 
-export type AuthInfo = z.infer<typeof AuthInfoSchema>;
+export type AuthInfo = zod.z.infer<typeof AuthInfoSchema>;

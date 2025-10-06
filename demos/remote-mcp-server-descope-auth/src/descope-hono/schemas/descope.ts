@@ -9,4 +9,4 @@ export const DescopeErrorResponseSchema = z.object({
 	errorDescription: z.string().optional(),
 });
 
-export type DescopeErrorResponse = z.infer<typeof DescopeErrorResponseSchema>;
+export type DescopeErrorResponse = zod.z.infer<typeof DescopeErrorResponseSchema>;

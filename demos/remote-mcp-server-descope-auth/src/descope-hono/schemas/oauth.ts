@@ -92,9 +92,9 @@ export const OAuthClientRegistrationErrorSchema = z
 	})
 	.strip();
 
-export type OAuthMetadata = z.infer<typeof OAuthMetadataSchema>;
-export type OAuthErrorResponse = z.infer<typeof OAuthErrorResponseSchema>;
-export type OAuthClientMetadata = z.infer<typeof OAuthClientMetadataSchema>;
-export type OAuthClientInformation = z.infer<typeof OAuthClientInformationSchema>;
-export type OAuthClientInformationFull = z.infer<typeof OAuthClientInformationFullSchema>;
-export type OAuthClientRegistrationError = z.infer<typeof OAuthClientRegistrationErrorSchema>;
+export type OAuthMetadata = zod.z.infer<typeof OAuthMetadataSchema>;
+export type OAuthErrorResponse = zod.z.infer<typeof OAuthErrorResponseSchema>;
+export type OAuthClientMetadata = zod.z.infer<typeof OAuthClientMetadataSchema>;
+export type OAuthClientInformation = zod.z.infer<typeof OAuthClientInformationSchema>;
+export type OAuthClientInformationFull = zod.z.infer<typeof OAuthClientInformationFullSchema>;
+export type OAuthClientRegistrationError = zod.z.infer<typeof OAuthClientRegistrationErrorSchema>;

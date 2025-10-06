@@ -91,11 +91,11 @@ export const DescopeMcpProviderOptionsSchema = z.object({
 	serviceDocumentationUrl: z.string().optional(),
 });
 
-export type Scope = z.infer<typeof ScopeSchema>;
-export type AttributeScope = z.infer<typeof AttributeScopeSchema>;
-export type PermissionScope = z.infer<typeof PermissionScopeSchema>;
-export type VerifyTokenOptions = z.infer<typeof VerifyTokenOptionsSchema>;
-export type DynamicClientRegistrationOptions = z.infer<
+export type Scope = zod.z.infer<typeof ScopeSchema>;
+export type AttributeScope = zod.z.infer<typeof AttributeScopeSchema>;
+export type PermissionScope = zod.z.infer<typeof PermissionScopeSchema>;
+export type VerifyTokenOptions = zod.z.infer<typeof VerifyTokenOptionsSchema>;
+export type DynamicClientRegistrationOptions = zod.z.infer<
 	typeof DynamicClientRegistrationOptionsSchema
 >;
-export type DescopeMcpProviderOptions = z.infer<typeof DescopeMcpProviderOptionsSchema>;
+export type DescopeMcpProviderOptions = zod.z.infer<typeof DescopeMcpProviderOptionsSchema>;
