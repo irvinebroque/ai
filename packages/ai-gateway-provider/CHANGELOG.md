@@ -1,5 +1,11 @@
 # ai-gateway-provider
 
+## 2.0.1
+
+### Patch Changes
+
+- [#285](https://github.com/cloudflare/ai/pull/285) [`4cbabf4`](https://github.com/cloudflare/ai/commit/4cbabf4a39fdb989119cbb3e6f3f67ca5265a8d5) Thanks [@palashgo](https://github.com/palashgo)! - fix: wrappers for vendor factories making apiKey optional
+
 ## 2.0.0
 
 ### Major Changes
